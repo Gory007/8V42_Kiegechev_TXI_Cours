@@ -1,0 +1,5 @@
+C:/works/Course_4sem/Chess960/build/CMakeFiles/Chess960.dir
+C:/works/Course_4sem/Chess960/build/CMakeFiles/edit_cache.dir
+C:/works/Course_4sem/Chess960/build/CMakeFiles/rebuild_cache.dir
+C:/works/Course_4sem/Chess960/build/CMakeFiles/Chess960_autogen_timestamp_deps.dir
+C:/works/Course_4sem/Chess960/build/CMakeFiles/Chess960_autogen.dir

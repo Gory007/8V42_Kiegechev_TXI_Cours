@@ -1,0 +1,18 @@
+# ninja log v6
+2314	9452	8025180377177485	CMakeFiles/Chess960.dir/src/gamecontroller.cpp.obj	c44d437018e0fcfe
+232	2083	8025186727924938	Chess960_autogen/mocs_compilation.cpp	48b9fc301454ca7f
+1619	7901	8024744965016326	CMakeFiles/Chess960.dir/src/board.cpp.obj	bde258f74feb91b2
+2532	2788	8025186733756136	CMakeFiles/Chess960.dir/qrc_qml.cpp.obj	cd91ff2366e86d88
+232	2083	8025186727924938	C:/works/Course_4sem/Chess960/build/Chess960_autogen/mocs_compilation.cpp	48b9fc301454ca7f
+232	2083	8025186727924938	Chess960_autogen/timestamp	48b9fc301454ca7f
+7754	8447	8025186785966226	Chess960.exe	3cdbd0eb9938849
+1639	3791	8024744965216479	CMakeFiles/Chess960.dir/src/move.cpp.obj	12ebdd18be5e255f
+2087	2500	8025186733313563	qrc_qml.cpp	50caf771aebee970
+232	2083	8025186727924938	C:/works/Course_4sem/Chess960/build/Chess960_autogen/timestamp	48b9fc301454ca7f
+1629	3328	8024744965116453	CMakeFiles/Chess960.dir/src/piece.cpp.obj	c916adbfbcf96bc9
+2087	2500	8025186733313563	C:/works/Course_4sem/Chess960/build/qrc_qml.cpp	50caf771aebee970
+2512	7476	8025186733536871	CMakeFiles/Chess960.dir/src/main.cpp.obj	9f748b1b1deb7249
+2325	9454	8025180377289640	CMakeFiles/Chess960.dir/src/aiplayer.cpp.obj	f8647b78dd05f31e
+2521	7754	8025186733658290	CMakeFiles/Chess960.dir/src/gamewindow.cpp.obj	ba18d9f7ceea4f8c
+2500	7562	8025186733438367	CMakeFiles/Chess960.dir/Chess960_autogen/mocs_compilation.cpp.obj	3e86d13e1b4c8e99
+1649	3332	8024744965311882	CMakeFiles/Chess960.dir/src/movehistory.cpp.obj	88cfcaa2dfbfd299
