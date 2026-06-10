@@ -1,0 +1,21 @@
+# ninja log v6
+5	274	8027740293376576	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-mkdir	a53732c02d957b4d
+5	274	8027740293376576	C:/works/Course_4sem/Chess960/build/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-mkdir	a53732c02d957b4d
+275	3148	8027740322106258	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-download	53bb4f54426fc8d2
+275	3148	8027740322106258	C:/works/Course_4sem/Chess960/build/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-download	53bb4f54426fc8d2
+3150	3406	8027740324705043	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-update	b5c6c0f42d88d17d
+3150	3406	8027740324705043	C:/works/Course_4sem/Chess960/build/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-update	b5c6c0f42d88d17d
+3407	3656	8027740327209595	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-patch	189d132ced9bc1a8
+3407	3656	8027740327209595	C:/works/Course_4sem/Chess960/build/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-patch	189d132ced9bc1a8
+3657	3911	8027740329750828	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-configure	72f3ff0f4ede28ea
+3657	3911	8027740329750828	C:/works/Course_4sem/Chess960/build/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-configure	72f3ff0f4ede28ea
+3911	4171	8027740332344137	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-build	c5bece77ad2f8d10
+3911	4171	8027740332344137	C:/works/Course_4sem/Chess960/build/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-build	c5bece77ad2f8d10
+4172	4432	8027740334960568	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-install	e2ead9440ca4b154
+4172	4432	8027740334960568	C:/works/Course_4sem/Chess960/build/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-install	e2ead9440ca4b154
+4432	4702	8027740337663692	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-test	ab68d116c8f85b58
+4432	4702	8027740337663692	C:/works/Course_4sem/Chess960/build/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-test	ab68d116c8f85b58
+4702	5067	8027740341285906	CMakeFiles/googletest-populate-complete	6727bd5ab1a80e11
+4702	5067	8027740341285906	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-done	6727bd5ab1a80e11
+4702	5067	8027740341285906	C:/works/Course_4sem/Chess960/build/_deps/googletest-subbuild/CMakeFiles/googletest-populate-complete	6727bd5ab1a80e11
+4702	5067	8027740341285906	C:/works/Course_4sem/Chess960/build/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-done	6727bd5ab1a80e11

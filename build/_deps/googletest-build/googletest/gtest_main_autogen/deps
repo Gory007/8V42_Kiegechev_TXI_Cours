@@ -1,0 +1,15 @@
+gtest_main_autogen/timestamp: \
+	C:/msys64/mingw64/share/cmake/Modules/BasicConfigVersion-AnyNewerVersion.cmake.in \
+	C:/msys64/mingw64/share/cmake/Modules/CMakePackageConfigHelpers.cmake \
+	C:/msys64/mingw64/share/cmake/Modules/FindPackageHandleStandardArgs.cmake \
+	C:/msys64/mingw64/share/cmake/Modules/FindPackageMessage.cmake \
+	C:/msys64/mingw64/share/cmake/Modules/FindPython/Support.cmake \
+	C:/msys64/mingw64/share/cmake/Modules/FindPython3.cmake \
+	C:/msys64/mingw64/share/cmake/Modules/WriteBasicConfigVersionFile.cmake \
+	C:/works/Course_4sem/Chess960/build/_deps/googletest-src/googletest/CMakeLists.txt \
+	C:/works/Course_4sem/Chess960/build/_deps/googletest-src/googletest/cmake/Config.cmake.in \
+	C:/works/Course_4sem/Chess960/build/_deps/googletest-src/googletest/cmake/gtest.pc.in \
+	C:/works/Course_4sem/Chess960/build/_deps/googletest-src/googletest/cmake/gtest_main.pc.in \
+	C:/works/Course_4sem/Chess960/build/_deps/googletest-src/googletest/cmake/internal_utils.cmake \
+	C:/works/Course_4sem/Chess960/build/_deps/googletest-src/googletest/src/gtest_main.cc \
+	C:/msys64/mingw64/bin/cmake.exe

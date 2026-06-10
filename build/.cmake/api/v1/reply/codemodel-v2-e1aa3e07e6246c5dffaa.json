@@ -1,0 +1,310 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5
+					]
+				},
+				{
+					"build" : "_deps/googletest-build",
+					"childIndexes" : 
+					[
+						2
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-_deps.googletest-build-Debug-8b187651187085369010.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.13"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "build/_deps/googletest-src"
+				},
+				{
+					"build" : "_deps/googletest-build/googlemock",
+					"childIndexes" : 
+					[
+						3
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-_deps.googletest-build.googlemock-Debug-dd222be1ec650fdeb3d3.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.13"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 2,
+					"source" : "build/_deps/googletest-src/googlemock",
+					"targetIndexes" : 
+					[
+						6,
+						7,
+						8,
+						9,
+						10,
+						11
+					]
+				},
+				{
+					"build" : "_deps/googletest-build/googletest",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-_deps.googletest-build.googletest-Debug-5cd705d3f0288ec97e53.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.13"
+					},
+					"parentIndex" : 2,
+					"projectIndex" : 3,
+					"source" : "build/_deps/googletest-src/googletest",
+					"targetIndexes" : 
+					[
+						12,
+						13,
+						14,
+						15,
+						16,
+						17
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1
+					],
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "Chess960",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						2
+					],
+					"directoryIndexes" : 
+					[
+						1
+					],
+					"name" : "googletest-distribution",
+					"parentIndex" : 0
+				},
+				{
+					"childIndexes" : 
+					[
+						3
+					],
+					"directoryIndexes" : 
+					[
+						2
+					],
+					"name" : "gmock",
+					"parentIndex" : 1,
+					"targetIndexes" : 
+					[
+						6,
+						7,
+						8,
+						9,
+						10,
+						11
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						3
+					],
+					"name" : "gtest",
+					"parentIndex" : 2,
+					"targetIndexes" : 
+					[
+						12,
+						13,
+						14,
+						15,
+						16,
+						17
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "Chess960::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Chess960-Debug-07f666de5b7dc19bead0.json",
+					"name" : "Chess960",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Chess960Tests::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Chess960Tests-Debug-122007fdf6e36afb4b1b.json",
+					"name" : "Chess960Tests",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Chess960Tests_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Chess960Tests_autogen-Debug-e8b09f5dfb7b89ec6ca5.json",
+					"name" : "Chess960Tests_autogen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Chess960Tests_autogen_timestamp_deps::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Chess960Tests_autogen_timestamp_deps-Debug-737c3ddf1a55194b42e3.json",
+					"name" : "Chess960Tests_autogen_timestamp_deps",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Chess960_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Chess960_autogen-Debug-8e657bded7cb65aa8c6d.json",
+					"name" : "Chess960_autogen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Chess960_autogen_timestamp_deps::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Chess960_autogen_timestamp_deps-Debug-ecf736e5c0e88ea37fa0.json",
+					"name" : "Chess960_autogen_timestamp_deps",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "gmock::@0f7bb11d64f3678238c7",
+					"jsonFile" : "target-gmock-Debug-ceeb596d88ac492b0fff.json",
+					"name" : "gmock",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "gmock_autogen::@0f7bb11d64f3678238c7",
+					"jsonFile" : "target-gmock_autogen-Debug-f9a40f5839b12039e00a.json",
+					"name" : "gmock_autogen",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "gmock_autogen_timestamp_deps::@0f7bb11d64f3678238c7",
+					"jsonFile" : "target-gmock_autogen_timestamp_deps-Debug-c28ba7965cb9f87505f2.json",
+					"name" : "gmock_autogen_timestamp_deps",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "gmock_main::@0f7bb11d64f3678238c7",
+					"jsonFile" : "target-gmock_main-Debug-ad2c6c0e199e31ad4eee.json",
+					"name" : "gmock_main",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "gmock_main_autogen::@0f7bb11d64f3678238c7",
+					"jsonFile" : "target-gmock_main_autogen-Debug-fdba4cd4c5e3c010d7f3.json",
+					"name" : "gmock_main_autogen",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "gmock_main_autogen_timestamp_deps::@0f7bb11d64f3678238c7",
+					"jsonFile" : "target-gmock_main_autogen_timestamp_deps-Debug-960a336fcbc5f71f9b43.json",
+					"name" : "gmock_main_autogen_timestamp_deps",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "gtest::@1ea2dfc0605fe3ab2a3f",
+					"jsonFile" : "target-gtest-Debug-f3f00eca37877a5d7b25.json",
+					"name" : "gtest",
+					"projectIndex" : 3
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "gtest_autogen::@1ea2dfc0605fe3ab2a3f",
+					"jsonFile" : "target-gtest_autogen-Debug-07166dae33232e73cf1a.json",
+					"name" : "gtest_autogen",
+					"projectIndex" : 3
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "gtest_autogen_timestamp_deps::@1ea2dfc0605fe3ab2a3f",
+					"jsonFile" : "target-gtest_autogen_timestamp_deps-Debug-0a2e24c39c8b1c35b230.json",
+					"name" : "gtest_autogen_timestamp_deps",
+					"projectIndex" : 3
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "gtest_main::@1ea2dfc0605fe3ab2a3f",
+					"jsonFile" : "target-gtest_main-Debug-90c281ae2c225dd72b5c.json",
+					"name" : "gtest_main",
+					"projectIndex" : 3
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "gtest_main_autogen::@1ea2dfc0605fe3ab2a3f",
+					"jsonFile" : "target-gtest_main_autogen-Debug-f879cd70449b0a4aa15e.json",
+					"name" : "gtest_main_autogen",
+					"projectIndex" : 3
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "gtest_main_autogen_timestamp_deps::@1ea2dfc0605fe3ab2a3f",
+					"jsonFile" : "target-gtest_main_autogen_timestamp_deps-Debug-3bd171f59eb580a1f480.json",
+					"name" : "gtest_main_autogen_timestamp_deps",
+					"projectIndex" : 3
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/works/Course_4sem/Chess960/build",
+		"source" : "C:/works/Course_4sem/Chess960"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 8
+	}
+}

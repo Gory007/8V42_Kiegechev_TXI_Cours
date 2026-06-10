@@ -58,5 +58,95 @@
   "command": "C:\\msys64\\mingw64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_OPENGL_LIB -DQT_QMLINTEGRATION_LIB -DQT_QMLMETA_LIB -DQT_QMLMODELS_LIB -DQT_QMLWORKERSCRIPT_LIB -DQT_QML_LIB -DQT_QUICKCONTROLS2_LIB -DQT_QUICK_LIB -DQT_SVG_LIB -DUNICODE -DWIN32 -DWIN64 -DWINVER=0x0A00 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN32_WINNT=0x0A00 -D_WIN64 -IC:/works/Course_4sem/Chess960/build/Chess960_autogen/include -IC:/works/Course_4sem/Chess960/src -isystem C:/msys64/mingw64/include/qt6/QtCore -isystem C:/msys64/mingw64/include/qt6 -isystem C:/msys64/mingw64/share/qt6/mkspecs/win32-g++ -isystem C:/msys64/mingw64/include/qt6/QtGui -isystem C:/msys64/mingw64/include/qt6/QtQml -isystem C:/msys64/mingw64/include/qt6/QtQmlIntegration -isystem C:/msys64/mingw64/include/qt6/QtNetwork -isystem C:/msys64/mingw64/include/qt6/QtQuick -isystem C:/msys64/mingw64/include/qt6/QtQmlMeta -isystem C:/msys64/mingw64/include/qt6/QtQmlModels -isystem C:/msys64/mingw64/include/qt6/QtQmlWorkerScript -isystem C:/msys64/mingw64/include/qt6/QtOpenGL -isystem C:/msys64/mingw64/include/qt6/QtQuickControls2 -isystem C:/msys64/mingw64/include/qt6/QtSvg -g -std=gnu++17 -o CMakeFiles\\Chess960.dir\\qrc_qml.cpp.obj -c C:\\works\\Course_4sem\\Chess960\\build\\qrc_qml.cpp",
   "file": "C:\\works\\Course_4sem\\Chess960\\build\\qrc_qml.cpp",
   "output": "CMakeFiles\\Chess960.dir\\qrc_qml.cpp.obj"
+},
+{
+  "directory": "C:/works/Course_4sem/Chess960/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_NO_DEBUG -DUNICODE -DWIN32 -DWIN64 -DWINVER=0x0A00 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN32_WINNT=0x0A00 -D_WIN64 -IC:/works/Course_4sem/Chess960/build/Chess960Tests_autogen/include -IC:/works/Course_4sem/Chess960/src -IC:/works/Course_4sem/Chess960/tests -isystem C:/works/Course_4sem/Chess960/build/_deps/googletest-src/googletest/include -isystem C:/works/Course_4sem/Chess960/build/_deps/googletest-src/googletest -isystem C:/msys64/mingw64/include/qt6/QtCore -isystem C:/msys64/mingw64/include/qt6 -isystem C:/msys64/mingw64/share/qt6/mkspecs/win32-g++ -g -std=gnu++17 -o CMakeFiles\\Chess960Tests.dir\\Chess960Tests_autogen\\mocs_compilation.cpp.obj -c C:\\works\\Course_4sem\\Chess960\\build\\Chess960Tests_autogen\\mocs_compilation.cpp",
+  "file": "C:\\works\\Course_4sem\\Chess960\\build\\Chess960Tests_autogen\\mocs_compilation.cpp",
+  "output": "CMakeFiles\\Chess960Tests.dir\\Chess960Tests_autogen\\mocs_compilation.cpp.obj"
+},
+{
+  "directory": "C:/works/Course_4sem/Chess960/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_NO_DEBUG -DUNICODE -DWIN32 -DWIN64 -DWINVER=0x0A00 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN32_WINNT=0x0A00 -D_WIN64 -IC:/works/Course_4sem/Chess960/build/Chess960Tests_autogen/include -IC:/works/Course_4sem/Chess960/src -IC:/works/Course_4sem/Chess960/tests -isystem C:/works/Course_4sem/Chess960/build/_deps/googletest-src/googletest/include -isystem C:/works/Course_4sem/Chess960/build/_deps/googletest-src/googletest -isystem C:/msys64/mingw64/include/qt6/QtCore -isystem C:/msys64/mingw64/include/qt6 -isystem C:/msys64/mingw64/share/qt6/mkspecs/win32-g++ -g -std=gnu++17 -o CMakeFiles\\Chess960Tests.dir\\tests\\test_main.cpp.obj -c C:\\works\\Course_4sem\\Chess960\\tests\\test_main.cpp",
+  "file": "C:\\works\\Course_4sem\\Chess960\\tests\\test_main.cpp",
+  "output": "CMakeFiles\\Chess960Tests.dir\\tests\\test_main.cpp.obj"
+},
+{
+  "directory": "C:/works/Course_4sem/Chess960/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_NO_DEBUG -DUNICODE -DWIN32 -DWIN64 -DWINVER=0x0A00 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN32_WINNT=0x0A00 -D_WIN64 -IC:/works/Course_4sem/Chess960/build/Chess960Tests_autogen/include -IC:/works/Course_4sem/Chess960/src -IC:/works/Course_4sem/Chess960/tests -isystem C:/works/Course_4sem/Chess960/build/_deps/googletest-src/googletest/include -isystem C:/works/Course_4sem/Chess960/build/_deps/googletest-src/googletest -isystem C:/msys64/mingw64/include/qt6/QtCore -isystem C:/msys64/mingw64/include/qt6 -isystem C:/msys64/mingw64/share/qt6/mkspecs/win32-g++ -g -std=gnu++17 -o CMakeFiles\\Chess960Tests.dir\\tests\\test_board.cpp.obj -c C:\\works\\Course_4sem\\Chess960\\tests\\test_board.cpp",
+  "file": "C:\\works\\Course_4sem\\Chess960\\tests\\test_board.cpp",
+  "output": "CMakeFiles\\Chess960Tests.dir\\tests\\test_board.cpp.obj"
+},
+{
+  "directory": "C:/works/Course_4sem/Chess960/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_NO_DEBUG -DUNICODE -DWIN32 -DWIN64 -DWINVER=0x0A00 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN32_WINNT=0x0A00 -D_WIN64 -IC:/works/Course_4sem/Chess960/build/Chess960Tests_autogen/include -IC:/works/Course_4sem/Chess960/src -IC:/works/Course_4sem/Chess960/tests -isystem C:/works/Course_4sem/Chess960/build/_deps/googletest-src/googletest/include -isystem C:/works/Course_4sem/Chess960/build/_deps/googletest-src/googletest -isystem C:/msys64/mingw64/include/qt6/QtCore -isystem C:/msys64/mingw64/include/qt6 -isystem C:/msys64/mingw64/share/qt6/mkspecs/win32-g++ -g -std=gnu++17 -o CMakeFiles\\Chess960Tests.dir\\src\\board.cpp.obj -c C:\\works\\Course_4sem\\Chess960\\src\\board.cpp",
+  "file": "C:\\works\\Course_4sem\\Chess960\\src\\board.cpp",
+  "output": "CMakeFiles\\Chess960Tests.dir\\src\\board.cpp.obj"
+},
+{
+  "directory": "C:/works/Course_4sem/Chess960/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_NO_DEBUG -DUNICODE -DWIN32 -DWIN64 -DWINVER=0x0A00 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN32_WINNT=0x0A00 -D_WIN64 -IC:/works/Course_4sem/Chess960/build/Chess960Tests_autogen/include -IC:/works/Course_4sem/Chess960/src -IC:/works/Course_4sem/Chess960/tests -isystem C:/works/Course_4sem/Chess960/build/_deps/googletest-src/googletest/include -isystem C:/works/Course_4sem/Chess960/build/_deps/googletest-src/googletest -isystem C:/msys64/mingw64/include/qt6/QtCore -isystem C:/msys64/mingw64/include/qt6 -isystem C:/msys64/mingw64/share/qt6/mkspecs/win32-g++ -g -std=gnu++17 -o CMakeFiles\\Chess960Tests.dir\\src\\piece.cpp.obj -c C:\\works\\Course_4sem\\Chess960\\src\\piece.cpp",
+  "file": "C:\\works\\Course_4sem\\Chess960\\src\\piece.cpp",
+  "output": "CMakeFiles\\Chess960Tests.dir\\src\\piece.cpp.obj"
+},
+{
+  "directory": "C:/works/Course_4sem/Chess960/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_NO_DEBUG -DUNICODE -DWIN32 -DWIN64 -DWINVER=0x0A00 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN32_WINNT=0x0A00 -D_WIN64 -IC:/works/Course_4sem/Chess960/build/Chess960Tests_autogen/include -IC:/works/Course_4sem/Chess960/src -IC:/works/Course_4sem/Chess960/tests -isystem C:/works/Course_4sem/Chess960/build/_deps/googletest-src/googletest/include -isystem C:/works/Course_4sem/Chess960/build/_deps/googletest-src/googletest -isystem C:/msys64/mingw64/include/qt6/QtCore -isystem C:/msys64/mingw64/include/qt6 -isystem C:/msys64/mingw64/share/qt6/mkspecs/win32-g++ -g -std=gnu++17 -o CMakeFiles\\Chess960Tests.dir\\src\\move.cpp.obj -c C:\\works\\Course_4sem\\Chess960\\src\\move.cpp",
+  "file": "C:\\works\\Course_4sem\\Chess960\\src\\move.cpp",
+  "output": "CMakeFiles\\Chess960Tests.dir\\src\\move.cpp.obj"
+},
+{
+  "directory": "C:/works/Course_4sem/Chess960/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_NO_DEBUG -DUNICODE -DWIN32 -DWIN64 -DWINVER=0x0A00 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN32_WINNT=0x0A00 -D_WIN64 -IC:/works/Course_4sem/Chess960/build/Chess960Tests_autogen/include -IC:/works/Course_4sem/Chess960/src -IC:/works/Course_4sem/Chess960/tests -isystem C:/works/Course_4sem/Chess960/build/_deps/googletest-src/googletest/include -isystem C:/works/Course_4sem/Chess960/build/_deps/googletest-src/googletest -isystem C:/msys64/mingw64/include/qt6/QtCore -isystem C:/msys64/mingw64/include/qt6 -isystem C:/msys64/mingw64/share/qt6/mkspecs/win32-g++ -g -std=gnu++17 -o CMakeFiles\\Chess960Tests.dir\\src\\movehistory.cpp.obj -c C:\\works\\Course_4sem\\Chess960\\src\\movehistory.cpp",
+  "file": "C:\\works\\Course_4sem\\Chess960\\src\\movehistory.cpp",
+  "output": "CMakeFiles\\Chess960Tests.dir\\src\\movehistory.cpp.obj"
+},
+{
+  "directory": "C:/works/Course_4sem/Chess960/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe -IC:/works/Course_4sem/Chess960/build/_deps/googletest-build/googlemock/gmock_autogen/include -IC:/works/Course_4sem/Chess960/build/_deps/googletest-src/googlemock/include -IC:/works/Course_4sem/Chess960/build/_deps/googletest-src/googlemock -isystem C:/works/Course_4sem/Chess960/build/_deps/googletest-src/googletest/include -isystem C:/works/Course_4sem/Chess960/build/_deps/googletest-src/googletest -g -std=c++17 -Wall -Wshadow -Wundef -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=0 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -o _deps\\googletest-build\\googlemock\\CMakeFiles\\gmock.dir\\gmock_autogen\\mocs_compilation.cpp.obj -c C:\\works\\Course_4sem\\Chess960\\build\\_deps\\googletest-build\\googlemock\\gmock_autogen\\mocs_compilation.cpp",
+  "file": "C:\\works\\Course_4sem\\Chess960\\build\\_deps\\googletest-build\\googlemock\\gmock_autogen\\mocs_compilation.cpp",
+  "output": "_deps\\googletest-build\\googlemock\\CMakeFiles\\gmock.dir\\gmock_autogen\\mocs_compilation.cpp.obj"
+},
+{
+  "directory": "C:/works/Course_4sem/Chess960/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe -IC:/works/Course_4sem/Chess960/build/_deps/googletest-build/googlemock/gmock_autogen/include -IC:/works/Course_4sem/Chess960/build/_deps/googletest-src/googlemock/include -IC:/works/Course_4sem/Chess960/build/_deps/googletest-src/googlemock -isystem C:/works/Course_4sem/Chess960/build/_deps/googletest-src/googletest/include -isystem C:/works/Course_4sem/Chess960/build/_deps/googletest-src/googletest -g -std=c++17 -Wall -Wshadow -Wundef -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=0 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -o _deps\\googletest-build\\googlemock\\CMakeFiles\\gmock.dir\\src\\gmock-all.cc.obj -c C:\\works\\Course_4sem\\Chess960\\build\\_deps\\googletest-src\\googlemock\\src\\gmock-all.cc",
+  "file": "C:\\works\\Course_4sem\\Chess960\\build\\_deps\\googletest-src\\googlemock\\src\\gmock-all.cc",
+  "output": "_deps\\googletest-build\\googlemock\\CMakeFiles\\gmock.dir\\src\\gmock-all.cc.obj"
+},
+{
+  "directory": "C:/works/Course_4sem/Chess960/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe -IC:/works/Course_4sem/Chess960/build/_deps/googletest-build/googlemock/gmock_main_autogen/include -isystem C:/works/Course_4sem/Chess960/build/_deps/googletest-src/googlemock/include -isystem C:/works/Course_4sem/Chess960/build/_deps/googletest-src/googlemock -isystem C:/works/Course_4sem/Chess960/build/_deps/googletest-src/googletest/include -isystem C:/works/Course_4sem/Chess960/build/_deps/googletest-src/googletest -g -std=c++17 -Wall -Wshadow -Wundef -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=0 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -o _deps\\googletest-build\\googlemock\\CMakeFiles\\gmock_main.dir\\gmock_main_autogen\\mocs_compilation.cpp.obj -c C:\\works\\Course_4sem\\Chess960\\build\\_deps\\googletest-build\\googlemock\\gmock_main_autogen\\mocs_compilation.cpp",
+  "file": "C:\\works\\Course_4sem\\Chess960\\build\\_deps\\googletest-build\\googlemock\\gmock_main_autogen\\mocs_compilation.cpp",
+  "output": "_deps\\googletest-build\\googlemock\\CMakeFiles\\gmock_main.dir\\gmock_main_autogen\\mocs_compilation.cpp.obj"
+},
+{
+  "directory": "C:/works/Course_4sem/Chess960/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe -IC:/works/Course_4sem/Chess960/build/_deps/googletest-build/googlemock/gmock_main_autogen/include -isystem C:/works/Course_4sem/Chess960/build/_deps/googletest-src/googlemock/include -isystem C:/works/Course_4sem/Chess960/build/_deps/googletest-src/googlemock -isystem C:/works/Course_4sem/Chess960/build/_deps/googletest-src/googletest/include -isystem C:/works/Course_4sem/Chess960/build/_deps/googletest-src/googletest -g -std=c++17 -Wall -Wshadow -Wundef -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=0 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -o _deps\\googletest-build\\googlemock\\CMakeFiles\\gmock_main.dir\\src\\gmock_main.cc.obj -c C:\\works\\Course_4sem\\Chess960\\build\\_deps\\googletest-src\\googlemock\\src\\gmock_main.cc",
+  "file": "C:\\works\\Course_4sem\\Chess960\\build\\_deps\\googletest-src\\googlemock\\src\\gmock_main.cc",
+  "output": "_deps\\googletest-build\\googlemock\\CMakeFiles\\gmock_main.dir\\src\\gmock_main.cc.obj"
+},
+{
+  "directory": "C:/works/Course_4sem/Chess960/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe -IC:/works/Course_4sem/Chess960/build/_deps/googletest-build/googletest/gtest_autogen/include -IC:/works/Course_4sem/Chess960/build/_deps/googletest-src/googletest/include -IC:/works/Course_4sem/Chess960/build/_deps/googletest-src/googletest -g -std=c++17 -Wall -Wshadow -Wundef -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=0 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -o _deps\\googletest-build\\googletest\\CMakeFiles\\gtest.dir\\gtest_autogen\\mocs_compilation.cpp.obj -c C:\\works\\Course_4sem\\Chess960\\build\\_deps\\googletest-build\\googletest\\gtest_autogen\\mocs_compilation.cpp",
+  "file": "C:\\works\\Course_4sem\\Chess960\\build\\_deps\\googletest-build\\googletest\\gtest_autogen\\mocs_compilation.cpp",
+  "output": "_deps\\googletest-build\\googletest\\CMakeFiles\\gtest.dir\\gtest_autogen\\mocs_compilation.cpp.obj"
+},
+{
+  "directory": "C:/works/Course_4sem/Chess960/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe -IC:/works/Course_4sem/Chess960/build/_deps/googletest-build/googletest/gtest_autogen/include -IC:/works/Course_4sem/Chess960/build/_deps/googletest-src/googletest/include -IC:/works/Course_4sem/Chess960/build/_deps/googletest-src/googletest -g -std=c++17 -Wall -Wshadow -Wundef -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=0 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -o _deps\\googletest-build\\googletest\\CMakeFiles\\gtest.dir\\src\\gtest-all.cc.obj -c C:\\works\\Course_4sem\\Chess960\\build\\_deps\\googletest-src\\googletest\\src\\gtest-all.cc",
+  "file": "C:\\works\\Course_4sem\\Chess960\\build\\_deps\\googletest-src\\googletest\\src\\gtest-all.cc",
+  "output": "_deps\\googletest-build\\googletest\\CMakeFiles\\gtest.dir\\src\\gtest-all.cc.obj"
+},
+{
+  "directory": "C:/works/Course_4sem/Chess960/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe -IC:/works/Course_4sem/Chess960/build/_deps/googletest-build/googletest/gtest_main_autogen/include -isystem C:/works/Course_4sem/Chess960/build/_deps/googletest-src/googletest/include -isystem C:/works/Course_4sem/Chess960/build/_deps/googletest-src/googletest -g -std=c++17 -Wall -Wshadow -Wundef -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=0 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -o _deps\\googletest-build\\googletest\\CMakeFiles\\gtest_main.dir\\gtest_main_autogen\\mocs_compilation.cpp.obj -c C:\\works\\Course_4sem\\Chess960\\build\\_deps\\googletest-build\\googletest\\gtest_main_autogen\\mocs_compilation.cpp",
+  "file": "C:\\works\\Course_4sem\\Chess960\\build\\_deps\\googletest-build\\googletest\\gtest_main_autogen\\mocs_compilation.cpp",
+  "output": "_deps\\googletest-build\\googletest\\CMakeFiles\\gtest_main.dir\\gtest_main_autogen\\mocs_compilation.cpp.obj"
+},
+{
+  "directory": "C:/works/Course_4sem/Chess960/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe -IC:/works/Course_4sem/Chess960/build/_deps/googletest-build/googletest/gtest_main_autogen/include -isystem C:/works/Course_4sem/Chess960/build/_deps/googletest-src/googletest/include -isystem C:/works/Course_4sem/Chess960/build/_deps/googletest-src/googletest -g -std=c++17 -Wall -Wshadow -Wundef -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=0 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -o _deps\\googletest-build\\googletest\\CMakeFiles\\gtest_main.dir\\src\\gtest_main.cc.obj -c C:\\works\\Course_4sem\\Chess960\\build\\_deps\\googletest-src\\googletest\\src\\gtest_main.cc",
+  "file": "C:\\works\\Course_4sem\\Chess960\\build\\_deps\\googletest-src\\googletest\\src\\gtest_main.cc",
+  "output": "_deps\\googletest-build\\googletest\\CMakeFiles\\gtest_main.dir\\src\\gtest_main.cc.obj"
 }
 ]

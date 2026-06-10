@@ -1,0 +1,7 @@
+{
+	"InstallScripts" : 
+	[
+		"C:/works/Course_4sem/Chess960/build/_deps/googletest-subbuild/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
