@@ -3,6 +3,7 @@
 #include <random>
 #include <QDebug>
 #include <iostream>
+#include <chrono>
 
 Board::Board() {
     for (int r = 0; r < 8; ++r)
@@ -67,70 +68,57 @@ Board Board::clone() const {
 }
 
 void Board::generateInitialPosition() {
-    qDebug() << "=== Board::generateInitialPosition ===";
+    qDebug() << "=== Board::generateInitialPosition (Chess960) ===";
     clearBoard();
-    std::mt19937 rng(std::random_device{}());
     
-    qDebug() << "Placing back rank pieces...";
-
-    // Лямбда-функция для расстановки фигур на одной горизонтали
-    auto placeBackRank = [&](int row, Color color) {
-        std::vector<int> available = {0, 1, 2, 3, 4, 5, 6, 7};
-
-        // 1. Слоны на полях разного цвета (четные и нечетные индексы)
-        std::vector<int> darkSquares = {0, 2, 4, 6};
-        std::vector<int> lightSquares = {1, 3, 5, 7};
-
-        int darkIdx = darkSquares[rng() % darkSquares.size()];
-        int lightIdx = lightSquares[rng() % lightSquares.size()];
-
-        cells[row][darkIdx] = new Bishop(color, Position(row, darkIdx));
-        cells[row][lightIdx] = new Bishop(color, Position(row, lightIdx));
-
-        // Удаляем занятые клетки из списка доступных
-        available.erase(std::remove(available.begin(), available.end(), darkIdx), available.end());
-        available.erase(std::remove(available.begin(), available.end(), lightIdx), available.end());
-
-        // 2. Ферзь
-        int qIdx = available[rng() % available.size()];
-        cells[row][qIdx] = new Queen(color, Position(row, qIdx));
-        available.erase(std::remove(available.begin(), available.end(), qIdx), available.end());
-
-        // 3. Два коня
-        int n1Idx = available[rng() % available.size()];
-        cells[row][n1Idx] = new Knight(color, Position(row, n1Idx));
-        available.erase(std::remove(available.begin(), available.end(), n1Idx), available.end());
-
-        int n2Idx = available[rng() % available.size()];
-        cells[row][n2Idx] = new Knight(color, Position(row, n2Idx));
-        available.erase(std::remove(available.begin(), available.end(), n2Idx), available.end());
-
-        // 4. Ладьи и Король
-        cells[row][available[0]] = new Rook(color, Position(row, available[0]));
-        cells[row][available[1]] = new King(color, Position(row, available[1]));
-        cells[row][available[2]] = new Rook(color, Position(row, available[2]));
-    };
-
-    // Белые фигуры внизу (ряд 7), черные вверху (ряд 0)
-    placeBackRank(7, Color::White);
-    placeBackRank(0, Color::Black);
-
+    // Генерируем случайную позицию для белых
+    std::vector<int> whiteBackRank = generateRandomChess960Position();
+    
+    // Расставляем белые фигуры (ряд 7)
+    for (int col = 0; col < 8; ++col) {
+        if (whiteBackRank[col] == -1) {
+            qDebug() << "ERROR: Invalid piece type at column" << col;
+            continue;
+        }
+        
+        PieceType type = static_cast<PieceType>(whiteBackRank[col]);
+        switch (type) {
+            case PieceType::King:   cells[7][col] = new King(Color::White, Position(7, col)); break;
+            case PieceType::Queen:  cells[7][col] = new Queen(Color::White, Position(7, col)); break;
+            case PieceType::Rook:   cells[7][col] = new Rook(Color::White, Position(7, col)); break;
+            case PieceType::Bishop: cells[7][col] = new Bishop(Color::White, Position(7, col)); break;
+            case PieceType::Knight: cells[7][col] = new Knight(Color::White, Position(7, col)); break;
+            default: 
+                qDebug() << "ERROR: Unknown piece type" << whiteBackRank[col];
+                break;
+        }
+    }
+    
+    // Расставляем черные фигуры (ряд 0) - зеркальное отражение
+    for (int col = 0; col < 8; ++col) {
+        if (whiteBackRank[col] == -1) {
+            qDebug() << "ERROR: Invalid piece type at column" << col;
+            continue;
+        }
+        
+        PieceType type = static_cast<PieceType>(whiteBackRank[col]);
+        switch (type) {
+            case PieceType::King:   cells[0][col] = new King(Color::Black, Position(0, col)); break;
+            case PieceType::Queen:  cells[0][col] = new Queen(Color::Black, Position(0, col)); break;
+            case PieceType::Rook:   cells[0][col] = new Rook(Color::Black, Position(0, col)); break;
+            case PieceType::Bishop: cells[0][col] = new Bishop(Color::Black, Position(0, col)); break;
+            case PieceType::Knight: cells[0][col] = new Knight(Color::Black, Position(0, col)); break;
+            default: break;
+        }
+    }
+    
     // Пешки
     for (int c = 0; c < 8; ++c) {
         cells[6][c] = new Pawn(Color::White, Position(6, c));
         cells[1][c] = new Pawn(Color::Black, Position(1, c));
     }
-
-    qDebug() << "generateInitialPosition completed - pieces placed";
     
-    // Проверка - выводим что на доске
-    int pieceCount = 0;
-    for (int r = 0; r < 8; ++r) {
-        for (int c = 0; c < 8; ++c) {
-            if (cells[r][c]) pieceCount++;
-        }
-    }
-    qDebug() << "Total pieces on board:" << pieceCount;
+    qDebug() << "generateInitialPosition completed - symmetric Chess960 position";
 }
 
 Position Board::findKing(Color color) const {
@@ -158,4 +146,101 @@ bool Board::isSquareAttacked(Position pos, Color byColor) const {
         }
     }
     return false;
+}
+
+std::vector<int> Board::generateRandomChess960Position() {
+    std::random_device rd;
+    std::mt19937 rng(rd());
+    
+    // Все возможные позиции для белых в Chess960
+    // Используем метод перебора до валидной позиции
+    std::vector<int> position(8);
+    bool validPosition = false;
+    int attempts = 0;
+    
+    while (!validPosition && attempts < 1000) {
+        attempts++;
+        
+        // Заполняем случайными типами фигур
+        std::vector<int> pieces = {
+            static_cast<int>(PieceType::Rook),
+            static_cast<int>(PieceType::Knight),
+            static_cast<int>(PieceType::Bishop),
+            static_cast<int>(PieceType::Queen),
+            static_cast<int>(PieceType::King),
+            static_cast<int>(PieceType::Bishop),
+            static_cast<int>(PieceType::Knight),
+            static_cast<int>(PieceType::Rook)
+        };
+        
+        // Перемешиваем
+        std::shuffle(pieces.begin(), pieces.end(), rng);
+        
+        // Копируем в позицию
+        for (int i = 0; i < 8; ++i) {
+            position[i] = pieces[i];
+        }
+        
+        // Проверяем правила Chess960
+        // 1. Слоны на разных цветах
+        int bishopPos1 = -1, bishopPos2 = -1;
+        for (int i = 0; i < 8; ++i) {
+            if (position[i] == static_cast<int>(PieceType::Bishop)) {
+                if (bishopPos1 == -1) bishopPos1 = i;
+                else bishopPos2 = i;
+            }
+        }
+        
+        bool bishopsOk = ((bishopPos1 + bishopPos2) % 2 != 0);
+        
+        // 2. Король между ладьями
+        int kingPos = -1;
+        int rookPos1 = -1, rookPos2 = -1;
+        for (int i = 0; i < 8; ++i) {
+            if (position[i] == static_cast<int>(PieceType::King)) kingPos = i;
+            if (position[i] == static_cast<int>(PieceType::Rook)) {
+                if (rookPos1 == -1) rookPos1 = i;
+                else rookPos2 = i;
+            }
+        }
+        
+        bool kingOk = (rookPos1 < kingPos && kingPos < rookPos2);
+        
+        if (bishopsOk && kingOk) {
+            validPosition = true;
+            qDebug() << "Valid Chess960 position found after" << attempts << "attempts";
+        }
+    }
+    
+    if (!validPosition) {
+        qDebug() << "Using fallback position";
+        // Стандартная расстановка
+        position = {
+            static_cast<int>(PieceType::Rook),
+            static_cast<int>(PieceType::Knight),
+            static_cast<int>(PieceType::Bishop),
+            static_cast<int>(PieceType::Queen),
+            static_cast<int>(PieceType::King),
+            static_cast<int>(PieceType::Bishop),
+            static_cast<int>(PieceType::Knight),
+            static_cast<int>(PieceType::Rook)
+        };
+    }
+    
+    // Вывод позиции для отладки
+    qDebug() << "Generated Chess960 position:";
+    for (int col = 0; col < 8; ++col) {
+        QString pieceName;
+        switch (position[col]) {
+            case 0: pieceName = "King"; break;
+            case 1: pieceName = "Queen"; break;
+            case 2: pieceName = "Rook"; break;
+            case 3: pieceName = "Bishop"; break;
+            case 4: pieceName = "Knight"; break;
+            default: pieceName = "Unknown"; break;
+        }
+        qDebug() << "  Col" << col << ":" << pieceName;
+    }
+    
+    return position;
 }
