@@ -7,7 +7,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick QuickControls2 Svg)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick QuickControls2 Svg Network)
 
 include(FetchContent)
 
@@ -34,6 +34,9 @@ add_executable(Chess960
     src/move.cpp
     src/movehistory.cpp
     src/aiplayer.cpp
+    src/network/networkclient.cpp
+    src/network/networkmanager.cpp
+    src/network/networkserver.cpp
     ${RESOURCES}
 )
 
@@ -68,6 +71,7 @@ target_link_libraries(Chess960 PRIVATE
     Qt6::Quick
     Qt6::QuickControls2
     Qt6::Svg
+    Qt6::Network
 )
 
 target_include_directories(Chess960 PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)

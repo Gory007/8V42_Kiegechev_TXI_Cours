@@ -1258,6 +1258,24 @@
 			null
 		],
 		[
+			"C:/works/Course_4sem/Chess960/src/network/networkclient.h",
+			"MU",
+			"UFQQIFJZKK/moc_networkclient.cpp",
+			null
+		],
+		[
+			"C:/works/Course_4sem/Chess960/src/network/networkmanager.h",
+			"MU",
+			"UFQQIFJZKK/moc_networkmanager.cpp",
+			null
+		],
+		[
+			"C:/works/Course_4sem/Chess960/src/network/networkserver.h",
+			"MU",
+			"UFQQIFJZKK/moc_networkserver.cpp",
+			null
+		],
+		[
 			"C:/works/Course_4sem/Chess960/src/piece.h",
 			"MU",
 			"UVLADIE3JM/moc_piece.cpp",
@@ -1362,6 +1380,21 @@
 		[ "C:/works/Course_4sem/Chess960/src/main.cpp", "MU", null ],
 		[ "C:/works/Course_4sem/Chess960/src/move.cpp", "MU", null ],
 		[ "C:/works/Course_4sem/Chess960/src/movehistory.cpp", "MU", null ],
+		[
+			"C:/works/Course_4sem/Chess960/src/network/networkclient.cpp",
+			"MU",
+			null
+		],
+		[
+			"C:/works/Course_4sem/Chess960/src/network/networkmanager.cpp",
+			"MU",
+			null
+		],
+		[
+			"C:/works/Course_4sem/Chess960/src/network/networkserver.cpp",
+			"MU",
+			null
+		],
 		[ "C:/works/Course_4sem/Chess960/src/piece.cpp", "MU", null ]
 	],
 	"UIC_OPTIONS" : [],
