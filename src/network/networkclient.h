@@ -8,4 +8,11 @@ class NetworkClient : public QTcpSocket
 
 public:
     explicit NetworkClient(QObject *parent = nullptr);
+
+    void connectToServer(const QString& ip, quint16 port);
+    void disconnectFromServer();
+
+signals:
+    void connectedToServer();
+    void disconnectedFromServer();
 };
