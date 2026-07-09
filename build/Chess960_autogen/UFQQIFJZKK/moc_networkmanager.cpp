@@ -38,10 +38,24 @@ template <> constexpr inline auto NetworkManager::qt_create_metaobjectdata<qt_me
 {
     namespace QMC = QtMocConstants;
     QtMocHelpers::StringRefStorage qt_stringData {
-        "NetworkManager"
+        "NetworkManager",
+        "moveReceived",
+        "",
+        "Move",
+        "move",
+        "clientConnected",
+        "connectedToServer"
     };
 
     QtMocHelpers::UintData qt_methods {
+        // Signal 'moveReceived'
+        QtMocHelpers::SignalData<void(const Move &)>(1, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { 0x80000000 | 3, 4 },
+        }}),
+        // Signal 'clientConnected'
+        QtMocHelpers::SignalData<void()>(5, 2, QMC::AccessPublic, QMetaType::Void),
+        // Signal 'connectedToServer'
+        QtMocHelpers::SignalData<void()>(6, 2, QMC::AccessPublic, QMetaType::Void),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -63,10 +77,22 @@ Q_CONSTINIT const QMetaObject NetworkManager::staticMetaObject = { {
 void NetworkManager::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     auto *_t = static_cast<NetworkManager *>(_o);
-    (void)_t;
-    (void)_c;
-    (void)_id;
-    (void)_a;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        switch (_id) {
+        case 0: _t->moveReceived((*reinterpret_cast< std::add_pointer_t<Move>>(_a[1]))); break;
+        case 1: _t->clientConnected(); break;
+        case 2: _t->connectedToServer(); break;
+        default: ;
+        }
+    }
+    if (_c == QMetaObject::IndexOfMethod) {
+        if (QtMocHelpers::indexOfMethod<void (NetworkManager::*)(const Move & )>(_a, &NetworkManager::moveReceived, 0))
+            return;
+        if (QtMocHelpers::indexOfMethod<void (NetworkManager::*)()>(_a, &NetworkManager::clientConnected, 1))
+            return;
+        if (QtMocHelpers::indexOfMethod<void (NetworkManager::*)()>(_a, &NetworkManager::connectedToServer, 2))
+            return;
+    }
 }
 
 const QMetaObject *NetworkManager::metaObject() const
@@ -85,6 +111,36 @@ void *NetworkManager::qt_metacast(const char *_clname)
 int NetworkManager::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = QObject::qt_metacall(_c, _id, _a);
+    if (_id < 0)
+        return _id;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        if (_id < 3)
+            qt_static_metacall(this, _c, _id, _a);
+        _id -= 3;
+    }
+    if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
+        if (_id < 3)
+            *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
+        _id -= 3;
+    }
     return _id;
+}
+
+// SIGNAL 0
+void NetworkManager::moveReceived(const Move & _t1)
+{
+    QMetaObject::activate<void>(this, &staticMetaObject, 0, nullptr, _t1);
+}
+
+// SIGNAL 1
+void NetworkManager::clientConnected()
+{
+    QMetaObject::activate(this, &staticMetaObject, 1, nullptr);
+}
+
+// SIGNAL 2
+void NetworkManager::connectedToServer()
+{
+    QMetaObject::activate(this, &staticMetaObject, 2, nullptr);
 }
 QT_WARNING_POP
