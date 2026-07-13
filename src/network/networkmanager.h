@@ -3,6 +3,7 @@
 #include <QObject>
 #include "networkserver.h"
 #include "networkclient.h"
+#include "../move.h"
 
 class NetworkManager : public QObject
 {
