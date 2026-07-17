@@ -78,10 +78,12 @@ C:/works/Course_4sem/Chess960/build/Chess960_autogen/UVLADIE3JM/moc_gamecontroll
   C:/msys64/mingw64/include/c++/15.1.0/bits/stl_list.h \
   C:/msys64/mingw64/include/c++/15.1.0/bits/stl_map.h \
   C:/msys64/mingw64/include/c++/15.1.0/bits/stl_multimap.h \
+  C:/msys64/mingw64/include/c++/15.1.0/bits/stl_multiset.h \
   C:/msys64/mingw64/include/c++/15.1.0/bits/stl_numeric.h \
   C:/msys64/mingw64/include/c++/15.1.0/bits/stl_pair.h \
   C:/msys64/mingw64/include/c++/15.1.0/bits/stl_raw_storage_iter.h \
   C:/msys64/mingw64/include/c++/15.1.0/bits/stl_relops.h \
+  C:/msys64/mingw64/include/c++/15.1.0/bits/stl_set.h \
   C:/msys64/mingw64/include/c++/15.1.0/bits/stl_tempbuf.h \
   C:/msys64/mingw64/include/c++/15.1.0/bits/stl_tree.h \
   C:/msys64/mingw64/include/c++/15.1.0/bits/stl_uninitialized.h \
@@ -94,14 +96,17 @@ C:/works/Course_4sem/Chess960/build/Chess960_autogen/UVLADIE3JM/moc_gamecontroll
   C:/msys64/mingw64/include/c++/15.1.0/bits/uniform_int_dist.h \
   C:/msys64/mingw64/include/c++/15.1.0/bits/unique_ptr.h \
   C:/msys64/mingw64/include/c++/15.1.0/bits/unordered_map.h \
+  C:/msys64/mingw64/include/c++/15.1.0/bits/unordered_set.h \
   C:/msys64/mingw64/include/c++/15.1.0/bits/uses_allocator.h \
   C:/msys64/mingw64/include/c++/15.1.0/bits/uses_allocator_args.h \
   C:/msys64/mingw64/include/c++/15.1.0/bits/utility.h \
   C:/msys64/mingw64/include/c++/15.1.0/bits/vector.tcc \
   C:/msys64/mingw64/include/c++/15.1.0/bits/version.h \
+  C:/msys64/mingw64/include/c++/15.1.0/cassert \
   C:/msys64/mingw64/include/c++/15.1.0/cctype \
   C:/msys64/mingw64/include/c++/15.1.0/cerrno \
   C:/msys64/mingw64/include/c++/15.1.0/chrono \
+  C:/msys64/mingw64/include/c++/15.1.0/climits \
   C:/msys64/mingw64/include/c++/15.1.0/clocale \
   C:/msys64/mingw64/include/c++/15.1.0/cmath \
   C:/msys64/mingw64/include/c++/15.1.0/compare \
@@ -137,6 +142,7 @@ C:/works/Course_4sem/Chess960/build/Chess960_autogen/UVLADIE3JM/moc_gamecontroll
   C:/msys64/mingw64/include/c++/15.1.0/pstl/execution_defs.h \
   C:/msys64/mingw64/include/c++/15.1.0/pstl/glue_numeric_defs.h \
   C:/msys64/mingw64/include/c++/15.1.0/ratio \
+  C:/msys64/mingw64/include/c++/15.1.0/set \
   C:/msys64/mingw64/include/c++/15.1.0/stdexcept \
   C:/msys64/mingw64/include/c++/15.1.0/streambuf \
   C:/msys64/mingw64/include/c++/15.1.0/string \
@@ -158,6 +164,7 @@ C:/works/Course_4sem/Chess960/build/Chess960_autogen/UVLADIE3JM/moc_gamecontroll
   C:/msys64/mingw64/include/c++/15.1.0/type_traits \
   C:/msys64/mingw64/include/c++/15.1.0/typeinfo \
   C:/msys64/mingw64/include/c++/15.1.0/unordered_map \
+  C:/msys64/mingw64/include/c++/15.1.0/unordered_set \
   C:/msys64/mingw64/include/c++/15.1.0/utility \
   C:/msys64/mingw64/include/c++/15.1.0/variant \
   C:/msys64/mingw64/include/c++/15.1.0/vector \
@@ -187,11 +194,17 @@ C:/works/Course_4sem/Chess960/build/Chess960_autogen/UVLADIE3JM/moc_gamecontroll
   C:/msys64/mingw64/include/pthread_signal.h \
   C:/msys64/mingw64/include/pthread_time.h \
   C:/msys64/mingw64/include/pthread_unistd.h \
+  C:/msys64/mingw64/include/qt6/QtCore/QJsonDocument \
+  C:/msys64/mingw64/include/qt6/QtCore/QJsonObject \
   C:/msys64/mingw64/include/qt6/QtCore/QObject \
+  C:/msys64/mingw64/include/qt6/QtCore/QString \
   C:/msys64/mingw64/include/qt6/QtCore/q17memory.h \
   C:/msys64/mingw64/include/qt6/QtCore/q20functional.h \
+  C:/msys64/mingw64/include/qt6/QtCore/q20iterator.h \
   C:/msys64/mingw64/include/qt6/QtCore/q20memory.h \
   C:/msys64/mingw64/include/qt6/QtCore/q20type_traits.h \
+  C:/msys64/mingw64/include/qt6/QtCore/q20utility.h \
+  C:/msys64/mingw64/include/qt6/QtCore/q23utility.h \
   C:/msys64/mingw64/include/qt6/QtCore/qalgorithms.h \
   C:/msys64/mingw64/include/qt6/QtCore/qanystringview.h \
   C:/msys64/mingw64/include/qt6/QtCore/qarraydata.h \
@@ -206,6 +219,9 @@ C:/works/Course_4sem/Chess960/build/Chess960_autogen/UVLADIE3JM/moc_gamecontroll
   C:/msys64/mingw64/include/qt6/QtCore/qbytearrayalgorithms.h \
   C:/msys64/mingw64/include/qt6/QtCore/qbytearraylist.h \
   C:/msys64/mingw64/include/qt6/QtCore/qbytearrayview.h \
+  C:/msys64/mingw64/include/qt6/QtCore/qcalendar.h \
+  C:/msys64/mingw64/include/qt6/QtCore/qcborcommon.h \
+  C:/msys64/mingw64/include/qt6/QtCore/qcborvalue.h \
   C:/msys64/mingw64/include/qt6/QtCore/qchar.h \
   C:/msys64/mingw64/include/qt6/QtCore/qcompare.h \
   C:/msys64/mingw64/include/qt6/QtCore/qcompare_impl.h \
@@ -216,8 +232,12 @@ C:/works/Course_4sem/Chess960/build/Chess960_autogen/UVLADIE3JM/moc_gamecontroll
   C:/msys64/mingw64/include/qt6/QtCore/qcontainerfwd.h \
   C:/msys64/mingw64/include/qt6/QtCore/qcontainerinfo.h \
   C:/msys64/mingw64/include/qt6/QtCore/qcontainertools_impl.h \
+  C:/msys64/mingw64/include/qt6/QtCore/qcontiguouscache.h \
   C:/msys64/mingw64/include/qt6/QtCore/qdarwinhelpers.h \
   C:/msys64/mingw64/include/qt6/QtCore/qdatastream.h \
+  C:/msys64/mingw64/include/qt6/QtCore/qdatetime.h \
+  C:/msys64/mingw64/include/qt6/QtCore/qdebug.h \
+  C:/msys64/mingw64/include/qt6/QtCore/qendian.h \
   C:/msys64/mingw64/include/qt6/QtCore/qexceptionhandling.h \
   C:/msys64/mingw64/include/qt6/QtCore/qflags.h \
   C:/msys64/mingw64/include/qt6/QtCore/qfloat16.h \
@@ -227,14 +247,22 @@ C:/works/Course_4sem/Chess960/build/Chess960_autogen/UVLADIE3JM/moc_gamecontroll
   C:/msys64/mingw64/include/qt6/QtCore/qgenericatomic.h \
   C:/msys64/mingw64/include/qt6/QtCore/qglobal.h \
   C:/msys64/mingw64/include/qt6/QtCore/qglobalstatic.h \
+  C:/msys64/mingw64/include/qt6/QtCore/qhash.h \
   C:/msys64/mingw64/include/qt6/QtCore/qhashfunctions.h \
+  C:/msys64/mingw64/include/qt6/QtCore/qiodevice.h \
   C:/msys64/mingw64/include/qt6/QtCore/qiodevicebase.h \
   C:/msys64/mingw64/include/qt6/QtCore/qiterable.h \
   C:/msys64/mingw64/include/qt6/QtCore/qiterator.h \
+  C:/msys64/mingw64/include/qt6/QtCore/qjsondocument.h \
+  C:/msys64/mingw64/include/qt6/QtCore/qjsonobject.h \
+  C:/msys64/mingw64/include/qt6/QtCore/qjsonparseerror.h \
+  C:/msys64/mingw64/include/qt6/QtCore/qjsonvalue.h \
   C:/msys64/mingw64/include/qt6/QtCore/qlatin1stringview.h \
   C:/msys64/mingw64/include/qt6/QtCore/qlist.h \
+  C:/msys64/mingw64/include/qt6/QtCore/qlocale.h \
   C:/msys64/mingw64/include/qt6/QtCore/qlogging.h \
   C:/msys64/mingw64/include/qt6/QtCore/qmalloc.h \
+  C:/msys64/mingw64/include/qt6/QtCore/qmap.h \
   C:/msys64/mingw64/include/qt6/QtCore/qmath.h \
   C:/msys64/mingw64/include/qt6/QtCore/qmetacontainer.h \
   C:/msys64/mingw64/include/qt6/QtCore/qmetatype.h \
@@ -249,8 +277,15 @@ C:/works/Course_4sem/Chess960/build/Chess960_autogen/UVLADIE3JM/moc_gamecontroll
   C:/msys64/mingw64/include/qt6/QtCore/qpair.h \
   C:/msys64/mingw64/include/qt6/QtCore/qprocessordetection.h \
   C:/msys64/mingw64/include/qt6/QtCore/qrefcount.h \
+  C:/msys64/mingw64/include/qt6/QtCore/qregularexpression.h \
   C:/msys64/mingw64/include/qt6/QtCore/qscopedpointer.h \
   C:/msys64/mingw64/include/qt6/QtCore/qscopeguard.h \
+  C:/msys64/mingw64/include/qt6/QtCore/qset.h \
+  C:/msys64/mingw64/include/qt6/QtCore/qshareddata.h \
+  C:/msys64/mingw64/include/qt6/QtCore/qshareddata_impl.h \
+  C:/msys64/mingw64/include/qt6/QtCore/qsharedpointer.h \
+  C:/msys64/mingw64/include/qt6/QtCore/qsharedpointer_impl.h \
+  C:/msys64/mingw64/include/qt6/QtCore/qspan.h \
   C:/msys64/mingw64/include/qt6/QtCore/qstdlibdetection.h \
   C:/msys64/mingw64/include/qt6/QtCore/qstring.h \
   C:/msys64/mingw64/include/qt6/QtCore/qstringalgorithms.h \
@@ -276,6 +311,7 @@ C:/works/Course_4sem/Chess960/build/Chess960_autogen/UVLADIE3JM/moc_gamecontroll
   C:/msys64/mingw64/include/qt6/QtCore/qtdeprecationdefinitions.h \
   C:/msys64/mingw64/include/qt6/QtCore/qtdeprecationmarkers.h \
   C:/msys64/mingw64/include/qt6/QtCore/qtenvironmentvariables.h \
+  C:/msys64/mingw64/include/qt6/QtCore/qtextstream.h \
   C:/msys64/mingw64/include/qt6/QtCore/qtformat_impl.h \
   C:/msys64/mingw64/include/qt6/QtCore/qtmetamacros.h \
   C:/msys64/mingw64/include/qt6/QtCore/qtnoop.h \
@@ -287,10 +323,23 @@ C:/works/Course_4sem/Chess960/build/Chess960_autogen/UVLADIE3JM/moc_gamecontroll
   C:/msys64/mingw64/include/qt6/QtCore/qtversionchecks.h \
   C:/msys64/mingw64/include/qt6/QtCore/qtypeinfo.h \
   C:/msys64/mingw64/include/qt6/QtCore/qtypes.h \
+  C:/msys64/mingw64/include/qt6/QtCore/qurl.h \
   C:/msys64/mingw64/include/qt6/QtCore/qutf8stringview.h \
+  C:/msys64/mingw64/include/qt6/QtCore/quuid.h \
+  C:/msys64/mingw64/include/qt6/QtCore/qvariant.h \
+  C:/msys64/mingw64/include/qt6/QtCore/qvarlengtharray.h \
   C:/msys64/mingw64/include/qt6/QtCore/qversiontagging.h \
   C:/msys64/mingw64/include/qt6/QtCore/qxptype_traits.h \
   C:/msys64/mingw64/include/qt6/QtCore/qyieldcpu.h \
+  C:/msys64/mingw64/include/qt6/QtNetwork/QTcpServer \
+  C:/msys64/mingw64/include/qt6/QtNetwork/QTcpSocket \
+  C:/msys64/mingw64/include/qt6/QtNetwork/qabstractsocket.h \
+  C:/msys64/mingw64/include/qt6/QtNetwork/qhostaddress.h \
+  C:/msys64/mingw64/include/qt6/QtNetwork/qtcpserver.h \
+  C:/msys64/mingw64/include/qt6/QtNetwork/qtcpsocket.h \
+  C:/msys64/mingw64/include/qt6/QtNetwork/qtnetwork-config.h \
+  C:/msys64/mingw64/include/qt6/QtNetwork/qtnetworkexports.h \
+  C:/msys64/mingw64/include/qt6/QtNetwork/qtnetworkglobal.h \
   C:/msys64/mingw64/include/sched.h \
   C:/msys64/mingw64/include/sdks/_mingw_ddk.h \
   C:/msys64/mingw64/include/sec_api/stdio_s.h \
@@ -316,5 +365,8 @@ C:/works/Course_4sem/Chess960/build/Chess960_autogen/UVLADIE3JM/moc_gamecontroll
   C:/works/Course_4sem/Chess960/src/board.h \
   C:/works/Course_4sem/Chess960/src/move.h \
   C:/works/Course_4sem/Chess960/src/movehistory.h \
+  C:/works/Course_4sem/Chess960/src/network/networkclient.h \
+  C:/works/Course_4sem/Chess960/src/network/networkmanager.h \
+  C:/works/Course_4sem/Chess960/src/network/networkserver.h \
   C:/works/Course_4sem/Chess960/src/piece.h \
   C:/works/Course_4sem/Chess960/src/position.h

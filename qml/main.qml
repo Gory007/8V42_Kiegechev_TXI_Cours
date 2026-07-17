@@ -6,22 +6,28 @@ ApplicationWindow {
     visible: true
     width: 1000
     height: 700
-    title: "Шахматы Фишера (Chess960)"
-    
+    title: "Шахматы (Сетевая игра)"
+
     property var selectedCell: null
     property var cachedBoardState: []
 
     Connections {
         target: gameWindow
-        
+
         function onMessageShown(message) {
             messageLabel.text = message
             messageTimer.start()
         }
-        
+
         function onBoardUpdated() {
             cachedBoardState = gameWindow.getBoardState()
             console.log("Board updated, cells:", cachedBoardState.length)
+        }
+
+        function onConnectionStatusChanged(status) {
+            networkStatusLabel.text = status
+            messageLabel.text = status
+            messageTimer.start()
         }
     }
 
@@ -39,11 +45,6 @@ ApplicationWindow {
         gameWindow.startNewGame(0, 0)
         cachedBoardState = gameWindow.getBoardState()
         console.log("Initial board state loaded, cells:", cachedBoardState.length)
-        
-        // Выводим первую ячейку для отладки
-        if (cachedBoardState.length > 0) {
-            console.log("First cell:", JSON.stringify(cachedBoardState[0]))
-        }
     }
 
     MenuBar {
@@ -51,7 +52,7 @@ ApplicationWindow {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
-        
+
         Menu {
             title: "Игра"
             MenuItem {
@@ -64,7 +65,7 @@ ApplicationWindow {
                 }
             }
             MenuItem {
-                text: "Новая игра (Вы играете белыми)"
+                text: "Новая игра (Вы играете белыми vs ИИ)"
                 onTriggered: {
                     gameWindow.startNewGame(1, 0)
                     statusLabel.text = "Режим: Вы играете белыми"
@@ -73,10 +74,19 @@ ApplicationWindow {
                 }
             }
             MenuItem {
-                text: "Новая игра (Вы играете чёрными)"
+                text: "Новая игра (Вы играете чёрными vs ИИ)"
                 onTriggered: {
                     gameWindow.startNewGame(1, 1)
                     statusLabel.text = "Режим: Вы играете чёрными"
+                    cachedBoardState = gameWindow.getBoardState()
+                    selectedCell = null
+                }
+            }
+            MenuItem {
+                text: "Новая игра (Сетевая)"
+                onTriggered: {
+                    gameWindow.startNewGame(2, 0) // 2 = Network mode
+                    statusLabel.text = "Режим: Сетевая игра"
                     cachedBoardState = gameWindow.getBoardState()
                     selectedCell = null
                 }
@@ -87,7 +97,7 @@ ApplicationWindow {
             MenuItem {
                 text: "Сохранить историю в файл"
                 onTriggered: {
-                    gameWindow.saveGame("chess960_history.txt")
+                    gameWindow.saveGame("chess_history.txt")
                 }
             }
             MenuSeparator {}
@@ -103,7 +113,8 @@ ApplicationWindow {
         anchors.topMargin: menuBar.height
         anchors.margins: 15
         spacing: 20
-        
+
+        // Шахматная доска
         Rectangle {
             Layout.alignment: Qt.AlignCenter
             width: 560
@@ -111,31 +122,30 @@ ApplicationWindow {
             color: "#b58863"
             border.color: "#4a3018"
             border.width: 6
-            
+
             Grid {
                 id: boardGrid
                 anchors.centerIn: parent
                 rows: 8
                 columns: 8
                 spacing: 0
-                
+
                 Repeater {
                     model: 64
                     delegate: Rectangle {
                         width: 70
                         height: 70
-                        
+
                         property int row: Math.floor(index / 8)
                         property int col: index % 8
-                        
-                        // Для плоского списка - обращаемся по индексу
+
                         property var cellData: {
                             if (cachedBoardState && cachedBoardState.length > index) {
                                 return cachedBoardState[index]
                             }
                             return null
                         }
-                        
+
                         color: {
                             if (!cellData) {
                                 return (row + col) % 2 === 0 ? "#f0d9b5" : "#b58863"
@@ -147,8 +157,7 @@ ApplicationWindow {
                             }
                             return baseColor
                         }
-                        
-                        // Вместо Image используйте Text
+
                         Text {
                             anchors.centerIn: parent
                             font.pixelSize: 50
@@ -157,24 +166,17 @@ ApplicationWindow {
                             text: {
                                 if (!cellData || cellData.hasPiece !== true) return ""
                                 var symbols = {
-                                    "white_king": "♔",
-                                    "white_queen": "♕", 
-                                    "white_rook": "♖",
-                                    "white_bishop": "♗",
-                                    "white_knight": "♘",
-                                    "white_pawn": "♙",
-                                    "black_king": "♚",
-                                    "black_queen": "♛",
-                                    "black_rook": "♜", 
-                                    "black_bishop": "♝",
-                                    "black_knight": "♞",
-                                    "black_pawn": "♟"
+                                    "white_king": "♔", "white_queen": "♕", "white_rook": "♖",
+                                    "white_bishop": "♗", "white_knight": "♘", "white_pawn": "♙",
+                                    "black_king": "♚", "black_queen": "♛", "black_rook": "♜",
+                                    "black_bishop": "♝", "black_knight": "♞", "black_pawn": "♟"
                                 }
                                 var key = cellData.color + "_" + cellData.type
                                 return symbols[key] || "?"
                             }
                         }
-                        
+
+                        // Индикатор возможного хода (пустая клетка)
                         Rectangle {
                             anchors.centerIn: parent
                             width: 22
@@ -183,7 +185,8 @@ ApplicationWindow {
                             color: "#40000000"
                             visible: cellData ? (cellData.isLegalMove === true && cellData.hasPiece !== true) : false
                         }
-                        
+
+                        // Индикатор возможного взятия (клетка с фигурой)
                         Rectangle {
                             anchors.fill: parent
                             anchors.margins: 3
@@ -193,7 +196,7 @@ ApplicationWindow {
                             radius: 4
                             visible: cellData ? (cellData.isLegalMove === true && cellData.hasPiece === true) : false
                         }
-                        
+
                         MouseArea {
                             anchors.fill: parent
                             cursorShape: Qt.PointingHandCursor
@@ -205,12 +208,14 @@ ApplicationWindow {
                 }
             }
         }
-        
+
+        // Правая панель управления
         ColumnLayout {
             Layout.fillHeight: true
             Layout.preferredWidth: 320
             spacing: 15
-            
+
+            // Статус игры
             Rectangle {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 80
@@ -218,11 +223,11 @@ ApplicationWindow {
                 border.color: "#dcdcdc"
                 border.width: 1
                 radius: 4
-                
+
                 ColumnLayout {
                     anchors.centerIn: parent
                     spacing: 8
-                    
+
                     Text {
                         id: statusLabel
                         text: "Режим: Игрок vs Игрок"
@@ -230,7 +235,7 @@ ApplicationWindow {
                         font.pixelSize: 14
                         color: "#333333"
                     }
-                    
+
                     Text {
                         id: currentPlayerLabel
                         text: {
@@ -246,7 +251,89 @@ ApplicationWindow {
                     }
                 }
             }
-            
+
+            // Панель сетевой игры
+            Rectangle {
+                Layout.fillWidth: true
+                Layout.preferredHeight: 150
+                color: "#e3f2fd"
+                border.color: "#90caf9"
+                border.width: 1
+                radius: 4
+
+                ColumnLayout {
+                    anchors.fill: parent
+                    anchors.margins: 10
+                    spacing: 8
+
+                    Text {
+                        text: "Сетевая игра"
+                        font.bold: true
+                        font.pixelSize: 14
+                        color: "#1565c0"
+                    }
+
+                    RowLayout {
+                        Layout.fillWidth: true
+                        spacing: 5
+                        Text { text: "IP:"; font.pixelSize: 12; width: 30 }
+                        TextField {
+                            id: ipField
+                            Layout.fillWidth: true
+                            text: "127.0.0.1"
+                            font.pixelSize: 12
+                            padding: 4
+                        }
+                    }
+
+                    RowLayout {
+                        Layout.fillWidth: true
+                        spacing: 5
+                        Text { text: "Порт:"; font.pixelSize: 12; width: 30 }
+                        TextField {
+                            id: portField
+                            Layout.fillWidth: true
+                            text: "5555"
+                            validator: IntValidator { bottom: 1024; top: 65535 }
+                            font.pixelSize: 12
+                            padding: 4
+                        }
+                    }
+
+                    RowLayout {
+                        Layout.fillWidth: true
+                        spacing: 5
+                        Button {
+                            text: "Создать"
+                            Layout.fillWidth: true
+                            onClicked: {
+                                gameWindow.startServer(parseInt(portField.text))
+                                statusLabel.text = "Режим: Сетевая игра (Сервер)"
+                            }
+                        }
+                        Button {
+                            text: "Подключиться"
+                            Layout.fillWidth: true
+                            onClicked: {
+                                gameWindow.connectToServer(ipField.text, parseInt(portField.text))
+                                statusLabel.text = "Режим: Сетевая игра (Клиент)"
+                            }
+                        }
+                    }
+                    
+                    Text {
+                        id: networkStatusLabel
+                        text: ""
+                        font.pixelSize: 11
+                        color: "#d32f2f"
+                        wrapMode: Text.Wrap
+                        Layout.fillWidth: true
+                        horizontalAlignment: Text.AlignHCenter
+                    }
+                }
+            }
+
+            // Сообщения
             Rectangle {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 50
@@ -254,7 +341,7 @@ ApplicationWindow {
                 border.color: "#ffb300"
                 border.width: 1
                 radius: 4
-                
+
                 Text {
                     id: messageLabel
                     anchors.centerIn: parent
@@ -263,9 +350,11 @@ ApplicationWindow {
                     font.pixelSize: 16
                     color: "#d32f2f"
                     horizontalAlignment: Text.AlignHCenter
+                    wrapMode: Text.Wrap
                 }
             }
-            
+
+            // История партии
             Rectangle {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
@@ -273,11 +362,11 @@ ApplicationWindow {
                 border.color: "#dcdcdc"
                 border.width: 1
                 radius: 4
-                
+
                 ColumnLayout {
                     anchors.fill: parent
                     spacing: 0
-                    
+
                     Text {
                         text: "История партии"
                         font.bold: true
@@ -287,28 +376,28 @@ ApplicationWindow {
                         Layout.topMargin: 8
                         Layout.bottomMargin: 4
                     }
-                    
+
                     Rectangle {
                         Layout.fillWidth: true
                         Layout.preferredHeight: 1
                         color: "#eeeeee"
                     }
-                    
+
                     ScrollView {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         clip: true
-                        
+
                         ListView {
                             id: listView
                             anchors.fill: parent
                             model: gameWindow.moveHistory
-                            
+
                             delegate: RowLayout {
                                 width: listView.width
                                 height: 30
                                 spacing: 5
-                                
+
                                 Text {
                                     text: modelData.number + ". "
                                     width: 35
@@ -316,14 +405,14 @@ ApplicationWindow {
                                     font.pixelSize: 13
                                     color: "#666666"
                                 }
-                                
+
                                 Text {
                                     text: modelData.white
                                     width: 120
                                     font.pixelSize: 13
                                     font.family: "Courier New"
                                 }
-                                
+
                                 Text {
                                     text: modelData.black
                                     width: 120
@@ -331,7 +420,7 @@ ApplicationWindow {
                                     font.family: "Courier New"
                                 }
                             }
-                            
+
                             onCountChanged: {
                                 if (count > 0) {
                                     positionViewAtIndex(count - 1, ListView.End)
@@ -346,15 +435,15 @@ ApplicationWindow {
 
     function handleCellClick(row, col, index) {
         console.log("Click on:", row, col, "index:", index)
-        
+
         if (!cachedBoardState || cachedBoardState.length <= index) {
             console.log("Invalid board state")
             return
         }
-        
+
         var cellData = cachedBoardState[index]
         console.log("Cell data hasPiece:", cellData ? cellData.hasPiece : "null")
-        
+
         if (selectedCell) {
             if (selectedCell.row === row && selectedCell.col === col) {
                 selectedCell = null

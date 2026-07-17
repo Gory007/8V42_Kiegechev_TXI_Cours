@@ -1,14 +1,17 @@
 #ifndef GAMECONTROLLER_H
 #define GAMECONTROLLER_H
 
+#include <QObject>
+#include <QString>
 #include "board.h"
 #include "movehistory.h"
 #include "aiplayer.h"
-#include <string>
+#include "network/networkmanager.h"
 
 enum class GameMode {
     PvP,
-    PvAI
+    PvAI,
+    Network
 };
 
 enum class GameState {
@@ -18,13 +21,16 @@ enum class GameState {
     Stalemate
 };
 
-class GameController {
+class GameController : public QObject {
+    Q_OBJECT
+
 public:
     Board board;
     MoveHistory history;
     AIPlayer* aiPlayer;
     Color currentPlayer;
     GameMode mode;
+    NetworkManager* networkManager;
 
     GameController();
     ~GameController();
@@ -34,10 +40,22 @@ public:
     bool validateMove(Position from, Position to) const;
     GameState checkGameState() const;
     void saveHistoryToFile(const std::string& path);
-    
+
+    // Сетевые методы
+    void startServer(quint16 port);
+    void connectToServer(const QString& ip, quint16 port);
+    void handleNetworkMove(const Move& move);
+
     // Геттеры для UI
     Color getCurrentPlayer() const { return currentPlayer; }
     const Board& getBoard() const { return board; }
+
+signals:
+    void networkMoveReceived(int fromRow, int fromCol, int toRow, int toCol);
+    void connectionEstablished();
+
+private slots:
+    void onNetworkMoveReceived(const Move& move);
 };
 
 #endif // GAMECONTROLLER_H

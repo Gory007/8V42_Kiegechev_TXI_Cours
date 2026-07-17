@@ -197,6 +197,7 @@ Chess960_autogen/timestamp: \
 	C:/msys64/mingw64/include/qt6/QtCore/QJsonObject \
 	C:/msys64/mingw64/include/qt6/QtCore/QList \
 	C:/msys64/mingw64/include/qt6/QtCore/QObject \
+	C:/msys64/mingw64/include/qt6/QtCore/QString \
 	C:/msys64/mingw64/include/qt6/QtCore/QVariant \
 	C:/msys64/mingw64/include/qt6/QtCore/QVariantList \
 	C:/msys64/mingw64/include/qt6/QtCore/q17memory.h \
