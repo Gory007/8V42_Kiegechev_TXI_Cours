@@ -12,11 +12,11 @@ jobs:
         os: [windows-latest, ubuntu-22.04]
         include:
           - os: windows-latest
-            qt_arch: win64_msvc2019_64
+            qt_arch: win64_mingw81_64
             qt_version: '6.7.0'
             qt_modules: 'qt5compat qtshadertools'
           - os: ubuntu-22.04
-            qt_arch: gcc_64
+            qt_arch: ''  # Пустое значение - автоопределение
             qt_version: '6.7.0'
             qt_modules: ''
 
@@ -32,7 +32,7 @@ jobs:
           target: 'desktop'
           arch: ${{ matrix.qt_arch }}
           modules: ${{ matrix.qt_modules }}
-          dir: ${{ github.workspace }}/Qt
+          setup-python: false
 
       - name: Setup Build Tools (Windows)
         if: matrix.os == 'windows-latest'
