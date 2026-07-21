@@ -7,7 +7,19 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-22.04]
+        include:
+          - os: windows-latest
+            qt_arch: win64_msvc2022_64
+            qt_version: '6.6.0'
+            build_name: Windows
+          - os: ubuntu-22.04
+            qt_arch: gcc_64
+            qt_version: '6.6.0'
+            build_name: Linux
 
     steps:
       - name: Checkout code
@@ -16,43 +28,101 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
-          version: '6.6.0'
-          host: 'windows'
+          version: ${{ matrix.qt_version }}
+          host: ${{ matrix.os == 'windows-latest' && 'windows' || 'linux' }}
           target: 'desktop'
-          arch: 'win64_msvc2019_64'
+          arch: ${{ matrix.qt_arch }}
           modules: 'qtcharts'
           cache: 'true'
 
-      - name: Setup Ninja
-        uses: seanmiddleditch/gha-setup-ninja@v4
-
-      - name: Setup MSVC
+      - name: Setup Build Tools (Windows)
+        if: matrix.os == 'windows-latest'
         uses: ilammy/msvc-dev-cmd@v1
         with:
           arch: x64
 
+      - name: Setup Ninja
+        uses: seanmiddleditch/gha-setup-ninja@v4
+
+      - name: Install Linux Dependencies (Ubuntu)
+        if: matrix.os == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            cmake \
+            ninja-build \
+            libgl1-mesa-dev \
+            libxcb-cursor0 \
+            libxcb-icccm4 \
+            libxcb-image0 \
+            libxcb-keysyms1 \
+            libxcb-randr0 \
+            libxcb-render-util0 \
+            libxcb-shape0 \
+            libxcb-xfixes0 \
+            libxcb-xinerama0 \
+            libxkbcommon-x11-0 \
+            libfontconfig1 \
+            libfreetype6 \
+            libx11-xcb1 \
+            libxrender1 \
+            libxi6 \
+            libxkbcommon0
+
       - name: Build project
         run: |
           # Очищаем старую папку build
-          if (Test-Path build) {
-            Remove-Item -Recurse -Force build
-          }
+          if [ -d "build" ]; then
+            rm -rf build
+          fi
           mkdir build
           cd build
-          # Используем генератор Ninja
-          cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release
+          
+          if [ "${{ matrix.os }}" = "windows-latest" ]; then
+            cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release
+          else
+            cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release
+          fi
+          
           cmake --build . --config Release
 
-      - name: Deploy Qt dependencies
+      - name: Deploy Qt dependencies (Windows)
+        if: matrix.os == 'windows-latest'
         run: |
           cd build
-          # Копируем Qt DLL и другие зависимости
           windeployqt --release --no-translations Chess960.exe
 
-      - name: Create ZIP archive
+      - name: Deploy Qt dependencies (Linux)
+        if: matrix.os == 'ubuntu-22.04'
         run: |
           cd build
-          Compress-Archive -Path ./* -DestinationPath ../../Chess960_${{ github.ref_name }}.zip
+          # Копируем необходимые библиотеки Qt
+          mkdir -p lib
+          cp $(ldd Chess960 | grep Qt | cut -d ' ' -f 3 | xargs -I {} dirname {} | sort -u | xargs -I {} cp -r {} lib/ 2>/dev/null || true)
+          
+          # Создаем скрипт запуска
+          cat > run.sh << 'EOF'
+          #!/bin/bash
+          DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+          export LD_LIBRARY_PATH="$DIR/lib:$DIR:$LD_LIBRARY_PATH"
+          export QT_QPA_PLATFORM_PLUGIN_PATH="$DIR/plugins/platforms"
+          exec "$DIR/Chess960" "$@"
+          EOF
+          chmod +x run.sh
+
+      - name: Create Archive (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          cd build
+          Compress-Archive -Path ./* -DestinationPath ../../Chess960_${{ github.ref_name }}_Windows.zip
+
+      - name: Create Archive (Linux)
+        if: matrix.os == 'ubuntu-22.04'
+        run: |
+          cd build
+          tar -czf ../Chess960_${{ github.ref_name }}_Linux.tar.gz Chess960 run.sh lib/ plugins/ qml/ 2>/dev/null || \
+          tar -czf ../Chess960_${{ github.ref_name }}_Linux.tar.gz Chess960 run.sh lib/
 
       - name: Create Release
         id: create_release
@@ -65,12 +135,24 @@ jobs:
           draft: false
           prerelease: false
 
-      - name: Upload Release Asset
+      - name: Upload Release Asset (Windows)
+        if: matrix.os == 'windows-latest'
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Chess960_${{ github.ref_name }}.zip
-          asset_name: Chess960_${{ github.ref_name }}.zip
+          asset_path: ./Chess960_${{ github.ref_name }}_Windows.zip
+          asset_name: Chess960_${{ github.ref_name }}_Windows.zip
           asset_content_type: application/zip
+
+      - name: Upload Release Asset (Linux)
+        if: matrix.os == 'ubuntu-22.04'
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./Chess960_${{ github.ref_name }}_Linux.tar.gz
+          asset_name: Chess960_${{ github.ref_name }}_Linux.tar.gz
+          asset_content_type: application/gzip
