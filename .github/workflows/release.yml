@@ -12,7 +12,7 @@ jobs:
         os: [windows-latest, ubuntu-22.04]
         include:
           - os: windows-latest
-            qt_arch: 
+            qt_arch: '6.7.0'
             qt_version: '6.7.0'
           - os: ubuntu-22.04
             qt_arch: ''
@@ -28,7 +28,7 @@ jobs:
           version: ${{ matrix.qt_version }}
           host: ${{ matrix.os == 'windows-latest' && 'windows' || 'linux' }}
           target: 'desktop'
-          arch: ${{ matrix.qt_arch }}
+          arch: ${{ matrix.qt_arch == '' && '' || matrix.qt_arch }}
           setup-python: false
 
       - name: Setup Build Tools (Windows)
@@ -69,9 +69,9 @@ jobs:
 
       - name: Build project
         run: |
-          if [ -d "build" ]; then
-            rm -rf build
-          fi
+          if (Test-Path "build") {
+            Remove-Item -Recurse -Force "build"
+          }
           mkdir build
           cd build
           cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt
@@ -90,17 +90,14 @@ jobs:
           mkdir -p lib
           mkdir -p platforms
           
-          # Copy required libraries
           ldd Chess960 | grep "=>" | awk '{print $3}' | grep -v "^$" | while read lib; do
             if [ -f "$lib" ]; then
               cp -v "$lib" lib/ 2>/dev/null || true
             fi
           done
           
-          # Copy Qt platform plugin
           find ${{ github.workspace }}/Qt -name "libqxcb.so" -exec cp {} platforms/ \; 2>/dev/null || true
           
-          # Create run script
           cat > run.sh << 'EOF'
           #!/bin/bash
           DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
