@@ -16,7 +16,7 @@ jobs:
         os: [windows-latest, ubuntu-22.04]
         include:
           - os: windows-latest
-            qt_arch: ''
+            qt_arch: win64_msvc2019_64
             qt_version: '6.7.0'
           - os: ubuntu-22.04
             qt_arch: ''
@@ -80,7 +80,7 @@ jobs:
           }
           New-Item -ItemType Directory -Path "build"
           Set-Location build
-          cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF -DBUILD_TESTS=OFF -DCMAKE_PREFIX_PATH="${{ github.workspace }}/Qt"
+          cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF -DCMAKE_PREFIX_PATH="${{ github.workspace }}/Qt"
           cmake --build . --config Release
 
       - name: Build project (Linux)
@@ -91,7 +91,7 @@ jobs:
           fi
           mkdir build
           cd build
-          cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF -DBUILD_TESTS=OFF -DCMAKE_PREFIX_PATH="${{ github.workspace }}/Qt"
+          cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF -DCMAKE_PREFIX_PATH="${{ github.workspace }}/Qt"
           cmake --build . --config Release
 
       - name: Deploy Qt dependencies (Windows)
@@ -127,15 +127,19 @@ jobs:
 
       - name: Create Archive (Windows)
         if: matrix.os == 'windows-latest'
+        shell: pwsh
         run: |
-          cd build
-          Compress-Archive -Path ./* -DestinationPath ../../Chess960_${{ github.ref_name }}_Windows.zip
+          $archiveName = "Chess960_${{ github.ref_name }}_Windows.zip"
+          Compress-Archive -Path "${{ github.workspace }}/build/*" -DestinationPath "${{ github.workspace }}/$archiveName" -Force
+          Write-Host "Created archive: $archiveName"
+          Get-ChildItem "${{ github.workspace }}" -Filter "*.zip"
 
       - name: Create Archive (Linux)
         if: matrix.os == 'ubuntu-22.04'
         run: |
           cd build
           tar -czf ../Chess960_${{ github.ref_name }}_Linux.tar.gz Chess960 run.sh lib/ platforms/
+          ls -la ../*.tar.gz
 
       - name: Upload Release Asset (Windows)
         if: matrix.os == 'windows-latest'

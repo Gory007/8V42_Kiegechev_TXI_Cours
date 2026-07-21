@@ -1237,9 +1237,6 @@ Chess960_autogen/timestamp: \
 	C:/msys64/mingw64/share/cmake/Modules/Compiler/GNU-C.cmake \
 	C:/msys64/mingw64/share/cmake/Modules/Compiler/GNU-CXX.cmake \
 	C:/msys64/mingw64/share/cmake/Modules/Compiler/GNU.cmake \
-	C:/msys64/mingw64/share/cmake/Modules/ExternalProject/shared_internal_commands.cmake \
-	C:/msys64/mingw64/share/cmake/Modules/FetchContent.cmake \
-	C:/msys64/mingw64/share/cmake/Modules/FetchContent/CMakeLists.cmake.in \
 	C:/msys64/mingw64/share/cmake/Modules/FindPackageHandleStandardArgs.cmake \
 	C:/msys64/mingw64/share/cmake/Modules/FindPackageMessage.cmake \
 	C:/msys64/mingw64/share/cmake/Modules/FindThreads.cmake \
