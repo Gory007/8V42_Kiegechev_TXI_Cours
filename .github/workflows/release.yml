@@ -16,7 +16,7 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
-          version: '6.5.0'
+          version: '6.6.0'
           host: 'windows'
           target: 'desktop'
           arch: 'win64_msvc2019_64'
@@ -39,7 +39,7 @@ jobs:
           }
           mkdir build
           cd build
-          # Используем генератор Ninja вместо Visual Studio
+          # Используем генератор Ninja
           cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release
           cmake --build . --config Release
 
