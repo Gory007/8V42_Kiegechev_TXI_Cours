@@ -15,11 +15,9 @@ jobs:
           - os: windows-latest
             qt_arch: win64_msvc2022_64
             qt_version: '6.6.0'
-            build_name: Windows
           - os: ubuntu-22.04
             qt_arch: gcc_64
             qt_version: '6.6.0'
-            build_name: Linux
 
     steps:
       - name: Checkout code
@@ -32,8 +30,7 @@ jobs:
           host: ${{ matrix.os == 'windows-latest' && 'windows' || 'linux' }}
           target: 'desktop'
           arch: ${{ matrix.qt_arch }}
-          modules: 'qtcharts'
-          cache: 'true'
+          # Модуль qtcharts удален, так как он не нужен для шахмат и вызывает ошибку парсинга в aqt для данной архитектуры
 
       - name: Setup Build Tools (Windows)
         if: matrix.os == 'windows-latest'
@@ -79,12 +76,7 @@ jobs:
           mkdir build
           cd build
           
-          if [ "${{ matrix.os }}" = "windows-latest" ]; then
-            cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release
-          else
-            cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release
-          fi
-          
+          cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release
           cmake --build . --config Release
 
       - name: Deploy Qt dependencies (Windows)
@@ -97,16 +89,20 @@ jobs:
         if: matrix.os == 'ubuntu-22.04'
         run: |
           cd build
-          # Копируем необходимые библиотеки Qt
           mkdir -p lib
-          cp $(ldd Chess960 | grep Qt | cut -d ' ' -f 3 | xargs -I {} dirname {} | sort -u | xargs -I {} cp -r {} lib/ 2>/dev/null || true)
+          # Копируем все библиотеки, от которых зависит исполняемый файл
+          ldd Chess960 | grep "=>" | awk '{print $3}' | grep -v "^$" | xargs -I {} cp -v {} lib/ 2>/dev/null || true
+          
+          # Копируем плагины платформ Qt (необходимы для запуска GUI)
+          mkdir -p lib/platforms
+          cp $(find /opt -name "libqxcb.so" 2>/dev/null | head -n 1) lib/platforms/ 2>/dev/null || true
           
           # Создаем скрипт запуска
           cat > run.sh << 'EOF'
           #!/bin/bash
           DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
           export LD_LIBRARY_PATH="$DIR/lib:$DIR:$LD_LIBRARY_PATH"
-          export QT_QPA_PLATFORM_PLUGIN_PATH="$DIR/plugins/platforms"
+          export QT_QPA_PLATFORM_PLUGIN_PATH="$DIR/lib/platforms"
           exec "$DIR/Chess960" "$@"
           EOF
           chmod +x run.sh
@@ -121,38 +117,24 @@ jobs:
         if: matrix.os == 'ubuntu-22.04'
         run: |
           cd build
-          tar -czf ../Chess960_${{ github.ref_name }}_Linux.tar.gz Chess960 run.sh lib/ plugins/ qml/ 2>/dev/null || \
           tar -czf ../Chess960_${{ github.ref_name }}_Linux.tar.gz Chess960 run.sh lib/
-
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref_name }}
-          release_name: Release ${{ github.ref_name }}
-          draft: false
-          prerelease: false
 
       - name: Upload Release Asset (Windows)
         if: matrix.os == 'windows-latest'
-        uses: actions/upload-release-asset@v1
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          files: Chess960_${{ github.ref_name }}_Windows.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Chess960_${{ github.ref_name }}_Windows.zip
-          asset_name: Chess960_${{ github.ref_name }}_Windows.zip
-          asset_content_type: application/zip
 
       - name: Upload Release Asset (Linux)
         if: matrix.os == 'ubuntu-22.04'
-        uses: actions/upload-release-asset@v1
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          files: Chess960_${{ github.ref_name }}_Linux.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Chess960_${{ github.ref_name }}_Linux.tar.gz
-          asset_name: Chess960_${{ github.ref_name }}_Linux.tar.gz
-          asset_content_type: application/gzip
