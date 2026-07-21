@@ -14,11 +14,9 @@ jobs:
           - os: windows-latest
             qt_arch: win64_mingw81_64
             qt_version: '6.7.0'
-            qt_modules: 'qt5compat qtshadertools'
           - os: ubuntu-22.04
-            qt_arch: ''  # Пустое значение - автоопределение
+            qt_arch: ''
             qt_version: '6.7.0'
-            qt_modules: ''
 
     steps:
       - name: Checkout code
@@ -31,7 +29,6 @@ jobs:
           host: ${{ matrix.os == 'windows-latest' && 'windows' || 'linux' }}
           target: 'desktop'
           arch: ${{ matrix.qt_arch }}
-          modules: ${{ matrix.qt_modules }}
           setup-python: false
 
       - name: Setup Build Tools (Windows)
