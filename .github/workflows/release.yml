@@ -14,10 +14,10 @@ jobs:
         include:
           - os: windows-latest
             qt_arch: win64_msvc2022_64
-            qt_version: '6.6.0'
+            qt_version: '6.7.0'
           - os: ubuntu-22.04
             qt_arch: gcc_64
-            qt_version: '6.6.0'
+            qt_version: '6.7.0'
 
     steps:
       - name: Checkout code
@@ -30,7 +30,6 @@ jobs:
           host: ${{ matrix.os == 'windows-latest' && 'windows' || 'linux' }}
           target: 'desktop'
           arch: ${{ matrix.qt_arch }}
-          # Модуль qtcharts удален, так как он не нужен для шахмат и вызывает ошибку парсинга в aqt для данной архитектуры
 
       - name: Setup Build Tools (Windows)
         if: matrix.os == 'windows-latest'
@@ -69,7 +68,6 @@ jobs:
 
       - name: Build project
         run: |
-          # Очищаем старую папку build
           if [ -d "build" ]; then
             rm -rf build
           fi
@@ -90,14 +88,11 @@ jobs:
         run: |
           cd build
           mkdir -p lib
-          # Копируем все библиотеки, от которых зависит исполняемый файл
           ldd Chess960 | grep "=>" | awk '{print $3}' | grep -v "^$" | xargs -I {} cp -v {} lib/ 2>/dev/null || true
           
-          # Копируем плагины платформ Qt (необходимы для запуска GUI)
           mkdir -p lib/platforms
           cp $(find /opt -name "libqxcb.so" 2>/dev/null | head -n 1) lib/platforms/ 2>/dev/null || true
           
-          # Создаем скрипт запуска
           cat > run.sh << 'EOF'
           #!/bin/bash
           DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
