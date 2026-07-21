@@ -86,8 +86,9 @@ template <> constexpr inline auto GameWindow::qt_create_metaobjectdata<qt_meta_t
         "isNetworkGame",
         "isServer",
         "canMakeMove",
-        "myColor",
-        "isConnecting"
+        "isConnected",
+        "isConnecting",
+        "myColor"
     };
 
     QtMocHelpers::UintData qt_methods {
@@ -173,10 +174,12 @@ template <> constexpr inline auto GameWindow::qt_create_metaobjectdata<qt_meta_t
         QtMocHelpers::PropertyData<bool>(46, QMetaType::Bool, QMC::DefaultPropertyFlags, 5),
         // property 'canMakeMove'
         QtMocHelpers::PropertyData<bool>(47, QMetaType::Bool, QMC::DefaultPropertyFlags, 7),
-        // property 'myColor'
-        QtMocHelpers::PropertyData<Color>(48, 0x80000000 | 41, QMC::DefaultPropertyFlags | QMC::EnumOrFlag, 8),
+        // property 'isConnected'
+        QtMocHelpers::PropertyData<bool>(48, QMetaType::Bool, QMC::DefaultPropertyFlags, 6),
         // property 'isConnecting'
         QtMocHelpers::PropertyData<bool>(49, QMetaType::Bool, QMC::DefaultPropertyFlags, 9),
+        // property 'myColor'
+        QtMocHelpers::PropertyData<Color>(50, 0x80000000 | 41, QMC::DefaultPropertyFlags | QMC::EnumOrFlag, 8),
     };
     QtMocHelpers::UintData qt_enums {
     };
@@ -259,8 +262,9 @@ void GameWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 3: *reinterpret_cast<bool*>(_v) = _t->isNetworkGame(); break;
         case 4: *reinterpret_cast<bool*>(_v) = _t->isServer(); break;
         case 5: *reinterpret_cast<bool*>(_v) = _t->canMakeMove(); break;
-        case 6: *reinterpret_cast<Color*>(_v) = _t->getMyColor(); break;
+        case 6: *reinterpret_cast<bool*>(_v) = _t->isConnected(); break;
         case 7: *reinterpret_cast<bool*>(_v) = _t->isConnecting(); break;
+        case 8: *reinterpret_cast<Color*>(_v) = _t->getMyColor(); break;
         default: break;
         }
     }
@@ -298,7 +302,7 @@ int GameWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
             || _c == QMetaObject::ResetProperty || _c == QMetaObject::BindableProperty
             || _c == QMetaObject::RegisterPropertyMetaType) {
         qt_static_metacall(this, _c, _id, _a);
-        _id -= 8;
+        _id -= 9;
     }
     return _id;
 }

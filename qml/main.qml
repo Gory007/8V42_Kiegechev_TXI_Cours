@@ -7,29 +7,27 @@ ApplicationWindow {
     width: 1000
     height: 700
     title: "Шахматы (Сетевая игра)"
-
+    
     property var selectedCell: null
     property var cachedBoardState: []
     property bool isNetworkMode: false
 
     Connections {
         target: gameWindow
-
         function onMessageShown(message) {
             messageLabel.text = message
             messageTimer.start()
         }
-
         function onBoardUpdated() {
             cachedBoardState = gameWindow.getBoardState()
         }
-
         function onConnectionStatusChanged(status) {
             networkStatusLabel.text = status
-            messageLabel.text = status
-            messageTimer.start()
+            if (status !== "") {
+                messageLabel.text = status
+                messageTimer.start()
+            }
         }
-
         function onNetworkGameChanged() {
             isNetworkMode = gameWindow.isNetworkGame
         }
@@ -45,7 +43,6 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
-        console.log("=== Component.onCompleted ===")
         gameWindow.startNewGame(0, 0)
         cachedBoardState = gameWindow.getBoardState()
         isNetworkMode = false
@@ -56,7 +53,6 @@ ApplicationWindow {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
-
         Menu {
             title: "Игра"
             MenuItem {
@@ -104,9 +100,7 @@ ApplicationWindow {
             title: "Партия"
             MenuItem {
                 text: "Сохранить историю в файл"
-                onTriggered: {
-                    gameWindow.saveGame("chess_history.txt")
-                }
+                onTriggered: gameWindow.saveGame("chess_history.txt")
             }
             MenuSeparator {}
             MenuItem {
@@ -122,7 +116,6 @@ ApplicationWindow {
         anchors.margins: 15
         spacing: 20
 
-        // Шахматная доска
         Rectangle {
             Layout.alignment: Qt.AlignCenter
             width: 560
@@ -130,40 +123,27 @@ ApplicationWindow {
             color: "#b58863"
             border.color: "#4a3018"
             border.width: 6
-
+            
             Grid {
                 id: boardGrid
                 anchors.centerIn: parent
                 rows: 8
                 columns: 8
                 spacing: 0
-
                 Repeater {
                     model: 64
                     delegate: Rectangle {
                         width: 70
                         height: 70
-
                         property int row: Math.floor(index / 8)
                         property int col: index % 8
-
-                        property var cellData: {
-                            if (cachedBoardState && cachedBoardState.length > index) {
-                                return cachedBoardState[index]
-                            }
-                            return null
-                        }
-
+                        property var cellData: (cachedBoardState && cachedBoardState.length > index) ? cachedBoardState[index] : null
+                        
                         color: {
-                            if (!cellData) {
-                                return (row + col) % 2 === 0 ? "#f0d9b5" : "#b58863"
-                            }
+                            if (!cellData) return (row + col) % 2 === 0 ? "#f0d9b5" : "#b58863"
                             var isLight = (row + col) % 2 === 0
                             var baseColor = isLight ? "#f0d9b5" : "#b58863"
-                            if (cellData.isSelected === true) {
-                                return "#e6c229"
-                            }
-                            return baseColor
+                            return cellData.isSelected === true ? "#e6c229" : baseColor
                         }
 
                         Text {
@@ -179,16 +159,13 @@ ApplicationWindow {
                                     "black_king": "♚", "black_queen": "♛", "black_rook": "♜",
                                     "black_bishop": "♝", "black_knight": "♞", "black_pawn": "♟"
                                 }
-                                var key = cellData.color + "_" + cellData.type
-                                return symbols[key] || "?"
+                                return symbols[cellData.color + "_" + cellData.type] || "?"
                             }
                         }
 
                         Rectangle {
                             anchors.centerIn: parent
-                            width: 22
-                            height: 22
-                            radius: 11
+                            width: 22; height: 22; radius: 11
                             color: "#40000000"
                             visible: cellData ? (cellData.isLegalMove === true && cellData.hasPiece !== true) : false
                         }
@@ -207,25 +184,20 @@ ApplicationWindow {
                             anchors.fill: parent
                             cursorShape: Qt.PointingHandCursor
                             enabled: gameWindow.canMakeMove
-                            onClicked: {
-                                handleCellClick(row, col, index)
-                            }
+                            onClicked: handleCellClick(row, col, index)
                         }
                     }
                 }
             }
 
-            // Оверлей блокировки доски
             Rectangle {
                 anchors.fill: parent
                 color: "#80000000"
                 visible: isNetworkMode && !gameWindow.canMakeMove
                 z: 10
-
                 Column {
                     anchors.centerIn: parent
                     spacing: 10
-
                     Text {
                         anchors.horizontalCenter: parent.horizontalCenter
                         text: "⏳ Ожидание противника..."
@@ -233,7 +205,6 @@ ApplicationWindow {
                         font.bold: true
                         color: "white"
                     }
-
                     Text {
                         anchors.horizontalCenter: parent.horizontalCenter
                         text: gameWindow.isServer ? "Ожидание подключения игрока" : "Подключение к серверу..."
@@ -244,13 +215,11 @@ ApplicationWindow {
             }
         }
 
-        // Правая панель управления
         ColumnLayout {
             Layout.fillHeight: true
             Layout.preferredWidth: 320
             spacing: 15
 
-            // Статус игры
             Rectangle {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 80
@@ -258,11 +227,9 @@ ApplicationWindow {
                 border.color: "#dcdcdc"
                 border.width: 1
                 radius: 4
-
                 ColumnLayout {
                     anchors.centerIn: parent
                     spacing: 8
-
                     Text {
                         id: statusLabel
                         text: "Режим: Игрок vs Игрок"
@@ -270,15 +237,11 @@ ApplicationWindow {
                         font.pixelSize: 14
                         color: "#333333"
                     }
-
                     Text {
                         id: currentPlayerLabel
                         text: {
-                            try {
-                                return gameWindow.currentPlayer === 0 ? "Ход: Белые" : "Ход: Чёрные"
-                            } catch (e) {
-                                return "Ход: Белые"
-                            }
+                            try { return gameWindow.currentPlayer === 0 ? "Ход: Белые" : "Ход: Чёрные" } 
+                            catch (e) { return "Ход: Белые" }
                         }
                         font.pixelSize: 18
                         font.bold: true
@@ -287,7 +250,6 @@ ApplicationWindow {
                 }
             }
 
-            // Панель сетевой игры (показывается ТОЛЬКО в сетевом режиме)
             Rectangle {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 180
@@ -296,19 +258,19 @@ ApplicationWindow {
                 border.width: 1
                 radius: 4
                 visible: isNetworkMode
-
+                
                 ColumnLayout {
                     anchors.fill: parent
                     anchors.margins: 10
                     spacing: 8
-
+                    
                     Text {
                         text: "Сетевая игра"
                         font.bold: true
                         font.pixelSize: 14
                         color: "#1565c0"
                     }
-
+                    
                     RowLayout {
                         Layout.fillWidth: true
                         spacing: 5
@@ -319,10 +281,11 @@ ApplicationWindow {
                             text: "127.0.0.1"
                             font.pixelSize: 12
                             padding: 4
-                            enabled: !gameWindow.isServer
+                            // ИСПРАВЛЕНО: надежная блокировка во время подключения или игры
+                            enabled: !gameWindow.isConnecting && !gameWindow.isServer && !gameWindow.isConnected
                         }
                     }
-
+                    
                     RowLayout {
                         Layout.fillWidth: true
                         spacing: 5
@@ -334,17 +297,19 @@ ApplicationWindow {
                             validator: IntValidator { bottom: 1024; top: 65535 }
                             font.pixelSize: 12
                             padding: 4
-                            enabled: !gameWindow.canMakeMove
+                            // ИСПРАВЛЕНО: надежная блокировка во время подключения или игры
+                            enabled: !gameWindow.isConnecting && !gameWindow.isServer && !gameWindow.isConnected
                         }
                     }
-
+                    
                     RowLayout {
                         Layout.fillWidth: true
                         spacing: 5
                         Button {
                             text: "Создать"
                             Layout.fillWidth: true
-                            enabled: !gameWindow.canMakeMove && !gameWindow.isServer && !gameWindow.isConnecting
+                            // ИСПРАВЛЕНО: кнопка активна только если мы не подключаемся, не сервер и еще не подключены
+                            enabled: !gameWindow.isConnecting && !gameWindow.isServer && !gameWindow.isConnected
                             onClicked: {
                                 gameWindow.startServer(parseInt(portField.text))
                                 statusLabel.text = "Режим: Сетевая игра (Сервер)"
@@ -353,7 +318,8 @@ ApplicationWindow {
                         Button {
                             text: "Подключиться"
                             Layout.fillWidth: true
-                            enabled: !gameWindow.canMakeMove && !gameWindow.isServer && !gameWindow.isConnecting
+                            // ИСПРАВЛЕНО: кнопка активна только если мы не подключаемся, не сервер и еще не подключены
+                            enabled: !gameWindow.isConnecting && !gameWindow.isServer && !gameWindow.isConnected
                             onClicked: {
                                 gameWindow.connectToServer(ipField.text, parseInt(portField.text))
                                 statusLabel.text = "Режим: Сетевая игра (Клиент)"
@@ -373,7 +339,6 @@ ApplicationWindow {
                 }
             }
 
-            // Сообщения
             Rectangle {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 50
@@ -381,7 +346,6 @@ ApplicationWindow {
                 border.color: "#ffb300"
                 border.width: 1
                 radius: 4
-
                 Text {
                     id: messageLabel
                     anchors.centerIn: parent
@@ -394,7 +358,6 @@ ApplicationWindow {
                 }
             }
 
-            // История партии
             Rectangle {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
@@ -402,11 +365,9 @@ ApplicationWindow {
                 border.color: "#dcdcdc"
                 border.width: 1
                 radius: 4
-
                 ColumnLayout {
                     anchors.fill: parent
                     spacing: 0
-
                     Text {
                         text: "История партии"
                         font.bold: true
@@ -416,28 +377,23 @@ ApplicationWindow {
                         Layout.topMargin: 8
                         Layout.bottomMargin: 4
                     }
-
                     Rectangle {
                         Layout.fillWidth: true
                         Layout.preferredHeight: 1
                         color: "#eeeeee"
                     }
-
                     ScrollView {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         clip: true
-
                         ListView {
                             id: listView
                             anchors.fill: parent
                             model: gameWindow.moveHistory
-
                             delegate: RowLayout {
                                 width: listView.width
                                 height: 30
                                 spacing: 5
-
                                 Text {
                                     text: modelData.number + ". "
                                     width: 35
@@ -445,14 +401,12 @@ ApplicationWindow {
                                     font.pixelSize: 13
                                     color: "#666666"
                                 }
-
                                 Text {
                                     text: modelData.white
                                     width: 120
                                     font.pixelSize: 13
                                     font.family: "Courier New"
                                 }
-
                                 Text {
                                     text: modelData.black
                                     width: 120
@@ -460,11 +414,8 @@ ApplicationWindow {
                                     font.family: "Courier New"
                                 }
                             }
-
                             onCountChanged: {
-                                if (count > 0) {
-                                    positionViewAtIndex(count - 1, ListView.End)
-                                }
+                                if (count > 0) positionViewAtIndex(count - 1, ListView.End)
                             }
                         }
                     }
@@ -474,16 +425,10 @@ ApplicationWindow {
     }
 
     function handleCellClick(row, col, index) {
-        if (!gameWindow.canMakeMove) {
-            return
-        }
-
-        if (!cachedBoardState || cachedBoardState.length <= index) {
-            return
-        }
-
+        if (!gameWindow.canMakeMove) return
+        if (!cachedBoardState || cachedBoardState.length <= index) return
+        
         var cellData = cachedBoardState[index]
-
         if (selectedCell) {
             if (selectedCell.row === row && selectedCell.col === col) {
                 selectedCell = null

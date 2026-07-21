@@ -3,65 +3,70 @@ name: Build and Release
 on:
   push:
     tags:
-      - 'v*'  # Запускать только при создании тегов вида v1.0.0, v1.2.3 и т.д.
+      - 'v*' # Запускать только при создании тегов вида v1.0.0, v1.2.3 и т.д.
 
 jobs:
   build:
     runs-on: windows-latest
-    
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Install Qt
-      uses: jurplel/install-qt-action@v3
-      with:
-        version: '6.5.0'
-        host: 'windows'
-        target: 'desktop'
-        arch: 'win64_msvc2019_64'
-        modules: 'qtcharts'
-        cache: 'true'
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: '6.5.0'
+          host: 'windows'
+          target: 'desktop'
+          arch: 'win64_msvc2019_64'
+          modules: 'qtcharts'
+          cache: 'true'
 
-    - name: Setup MSVC
-      uses: ilammy/msvc-dev-cmd@v1
-      with:
-        arch: x64
+      - name: Setup MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
 
-    - name: Build project
-      run: |
-        mkdir build
-        cd build
-        cmake .. -G "Visual Studio 17 2022" -A x64
-        cmake --build . --config Release
+      - name: Build project
+        run: |
+          # Очищаем старую папку build, если она существует (исправляет ошибку mkdir)
+          if (Test-Path build) {
+            Remove-Item -Recurse -Force build
+          }
+          mkdir build
+          cd build
+          cmake .. -G "Visual Studio 17 2022" -A x64
+          cmake --build . --config Release
 
-    - name: Deploy Qt dependencies
-      run: |
-        cd build/Release
-        windeployqt --release --no-translations ChessGame.exe
+      - name: Deploy Qt dependencies
+        run: |
+          cd build/Release
+          # Исправлено имя exe файла с ChessGame на Chess960
+          windeployqt --release --no-translations Chess960.exe
 
-    - name: Create ZIP archive
-      run: |
-        cd build/Release
-        Compress-Archive -Path ./* -DestinationPath ../../ChessGame_${{ github.ref_name }}.zip
+      - name: Create ZIP archive
+        run: |
+          cd build/Release
+          Compress-Archive -Path ./* -DestinationPath ../../Chess960_${{ github.ref_name }}.zip
 
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.ref_name }}
-        release_name: Release ${{ github.ref_name }}
-        draft: false
-        prerelease: false
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref_name }}
+          release_name: Release ${{ github.ref_name }}
+          draft: false
+          prerelease: false
 
-    - name: Upload Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./ChessGame_${{ github.ref_name }}.zip
-        asset_name: ChessGame_${{ github.ref_name }}.zip
-        asset_content_type: application/zip
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./Chess960_${{ github.ref_name }}.zip
+          asset_name: Chess960_${{ github.ref_name }}.zip
+          asset_content_type: application/zip

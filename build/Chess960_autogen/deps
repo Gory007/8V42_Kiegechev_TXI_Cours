@@ -196,10 +196,12 @@ Chess960_autogen/timestamp: \
 	C:/msys64/mingw64/include/qt6/QtCore/QJsonDocument \
 	C:/msys64/mingw64/include/qt6/QtCore/QJsonObject \
 	C:/msys64/mingw64/include/qt6/QtCore/QList \
+	C:/msys64/mingw64/include/qt6/QtCore/QMap \
 	C:/msys64/mingw64/include/qt6/QtCore/QObject \
 	C:/msys64/mingw64/include/qt6/QtCore/QString \
 	C:/msys64/mingw64/include/qt6/QtCore/QVariant \
 	C:/msys64/mingw64/include/qt6/QtCore/QVariantList \
+	C:/msys64/mingw64/include/qt6/QtCore/QVariantMap \
 	C:/msys64/mingw64/include/qt6/QtCore/q17memory.h \
 	C:/msys64/mingw64/include/qt6/QtCore/q20functional.h \
 	C:/msys64/mingw64/include/qt6/QtCore/q20iterator.h \
@@ -330,6 +332,7 @@ Chess960_autogen/timestamp: \
 	C:/msys64/mingw64/include/qt6/QtCore/quuid.h \
 	C:/msys64/mingw64/include/qt6/QtCore/qvariant.h \
 	C:/msys64/mingw64/include/qt6/QtCore/qvariantlist.h \
+	C:/msys64/mingw64/include/qt6/QtCore/qvariantmap.h \
 	C:/msys64/mingw64/include/qt6/QtCore/qvarlengtharray.h \
 	C:/msys64/mingw64/include/qt6/QtCore/qversiontagging.h \
 	C:/msys64/mingw64/include/qt6/QtCore/qxptype_traits.h \
