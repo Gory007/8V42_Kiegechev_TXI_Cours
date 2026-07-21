@@ -80,7 +80,7 @@ jobs:
           }
           New-Item -ItemType Directory -Path "build"
           Set-Location build
-          cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="${{ github.workspace }}/Qt"
+          cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF -DCMAKE_PREFIX_PATH="${{ github.workspace }}/Qt"
           cmake --build . --config Release
 
       - name: Build project (Linux)
@@ -91,7 +91,7 @@ jobs:
           fi
           mkdir build
           cd build
-          cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="${{ github.workspace }}/Qt"
+          cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF -DCMAKE_PREFIX_PATH="${{ github.workspace }}/Qt"
           cmake --build . --config Release
 
       - name: Deploy Qt dependencies (Windows)
