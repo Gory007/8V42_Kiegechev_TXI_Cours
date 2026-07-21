@@ -3,7 +3,7 @@ name: Build and Release
 on:
   push:
     tags:
-      - 'v*' # Запускать только при создании тегов вида v1.0.0, v1.2.3 и т.д.
+      - 'v*'
 
 jobs:
   build:
@@ -23,6 +23,9 @@ jobs:
           modules: 'qtcharts'
           cache: 'true'
 
+      - name: Setup Ninja
+        uses: seanmiddleditch/gha-setup-ninja@v4
+
       - name: Setup MSVC
         uses: ilammy/msvc-dev-cmd@v1
         with:
@@ -30,24 +33,25 @@ jobs:
 
       - name: Build project
         run: |
-          # Очищаем старую папку build, если она существует (исправляет ошибку mkdir)
+          # Очищаем старую папку build
           if (Test-Path build) {
             Remove-Item -Recurse -Force build
           }
           mkdir build
           cd build
-          cmake .. -G "Visual Studio 17 2022" -A x64
+          # Используем генератор Ninja вместо Visual Studio
+          cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release
           cmake --build . --config Release
 
       - name: Deploy Qt dependencies
         run: |
-          cd build/Release
-          # Исправлено имя exe файла с ChessGame на Chess960
+          cd build
+          # Копируем Qt DLL и другие зависимости
           windeployqt --release --no-translations Chess960.exe
 
       - name: Create ZIP archive
         run: |
-          cd build/Release
+          cd build
           Compress-Archive -Path ./* -DestinationPath ../../Chess960_${{ github.ref_name }}.zip
 
       - name: Create Release
