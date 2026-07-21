@@ -12,7 +12,7 @@ jobs:
         os: [windows-latest, ubuntu-22.04]
         include:
           - os: windows-latest
-            qt_arch: '6.7.0'
+            qt_arch: ''
             qt_version: '6.7.0'
           - os: ubuntu-22.04
             qt_arch: ''
