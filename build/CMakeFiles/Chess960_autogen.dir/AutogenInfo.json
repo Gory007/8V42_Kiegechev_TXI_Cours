@@ -1210,9 +1210,6 @@
 		"C:/msys64/mingw64/lib/cmake/Qt6SvgPrivate/Qt6SvgPrivateAdditionalTargetInfo.cmake",
 		"C:/msys64/mingw64/lib/cmake/Qt6SvgPrivate/Qt6SvgPrivateVersionlessAliasTargets.cmake",
 		"C:/msys64/mingw64/lib/cmake/Qt6Svg/Qt6SvgVersionlessAliasTargets.cmake",
-		"C:/msys64/mingw64/share/cmake/Modules/FetchContent.cmake",
-		"C:/msys64/mingw64/share/cmake/Modules/ExternalProject/shared_internal_commands.cmake",
-		"C:/msys64/mingw64/share/cmake/Modules/FetchContent/CMakeLists.cmake.in",
 		"C:/works/Course_4sem/Chess960/qml/qml.qrc"
 	],
 	"CMAKE_SOURCE_DIR" : "C:/works/Course_4sem/Chess960",
