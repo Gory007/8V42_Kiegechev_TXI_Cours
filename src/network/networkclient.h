@@ -20,6 +20,7 @@ signals:
     void connectedToServer();
     void disconnectedFromServer();
     void moveReceived(const Move& move);
+    void connectionError(const QString& error); 
 
 private slots:
     void onReadyRead();

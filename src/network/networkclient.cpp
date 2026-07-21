@@ -6,6 +6,14 @@ NetworkClient::NetworkClient(QObject *parent)
     connect(this, &QTcpSocket::connected, this, &NetworkClient::connectedToServer);
     connect(this, &QTcpSocket::disconnected, this, &NetworkClient::disconnectedFromServer);
     connect(this, &QTcpSocket::readyRead, this, &NetworkClient::onReadyRead);
+
+    // Обработка ошибок подключения
+    connect(this, &QTcpSocket::errorOccurred, this, [this](QAbstractSocket::SocketError socketError) {
+        Q_UNUSED(socketError);
+        QString errorMsg = this->errorString();
+        qWarning() << "NetworkClient error:" << errorMsg;
+        emit connectionError(errorMsg);
+    });
 }
 
 void NetworkClient::connectToServer(const QString &ip, quint16 port)
@@ -41,13 +49,12 @@ void NetworkClient::onReadyRead()
 {
     QByteArray data = readAll();
     QString strData = QString::fromUtf8(data);
-    
     QStringList lines = strData.split('\n', Qt::SkipEmptyParts);
-    
+
     for (const QString& line : lines) {
         QJsonDocument doc = QJsonDocument::fromJson(line.toUtf8());
         if (doc.isNull()) continue;
-        
+
         QJsonObject json = doc.object();
         if (json["type"] == "move") {
             Move move = parseMoveFromJson(json);

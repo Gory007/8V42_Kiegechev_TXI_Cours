@@ -13,6 +13,9 @@ class GameWindow : public QObject {
     Q_PROPERTY(QVariantList moveHistory READ getMoveHistory NOTIFY historyChanged)
     Q_PROPERTY(bool isNetworkGame READ isNetworkGame NOTIFY networkGameChanged)
     Q_PROPERTY(bool isServer READ isServer NOTIFY networkGameChanged)
+    Q_PROPERTY(bool canMakeMove READ canMakeMove NOTIFY canMakeMoveChanged)
+    Q_PROPERTY(Color myColor READ getMyColor NOTIFY myColorChanged)
+    Q_PROPERTY(bool isConnecting READ isConnecting NOTIFY isConnectingChanged)
 
 public:
     explicit GameWindow(QObject *parent = nullptr);
@@ -33,6 +36,9 @@ public:
     GameState getGameState() const;
     bool isNetworkGame() const { return controller.mode == GameMode::Network; }
     bool isServer() const { return controller.networkManager && controller.networkManager->server()->isListening(); }
+    bool canMakeMove() const;
+    Color getMyColor() const { return myColor; }
+    bool isConnecting() const { return isAttemptingConnection; }
 
 signals:
     void currentPlayerChanged();
@@ -42,15 +48,23 @@ signals:
     void historyChanged();
     void networkGameChanged();
     void connectionStatusChanged(const QString& status);
+    void canMakeMoveChanged();
+    void myColorChanged();
+    void isConnectingChanged();
+    void connectionError(const QString& error);
 
 private slots:
     void onNetworkMoveReceived(int fromRow, int fromCol, int toRow, int toCol);
     void onConnectionEstablished();
+    void onConnectionError(const QString& error);
 
 private:
     GameController controller;
     Position selectedPosition;
     bool isPieceSelected;
+    bool isConnectionReady;
+    Color myColor;
+    bool isAttemptingConnection;
 };
 
 #endif // GAMEWINDOW_H

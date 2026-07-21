@@ -10,6 +10,7 @@ ApplicationWindow {
 
     property var selectedCell: null
     property var cachedBoardState: []
+    property bool isNetworkMode: false
 
     Connections {
         target: gameWindow
@@ -21,13 +22,16 @@ ApplicationWindow {
 
         function onBoardUpdated() {
             cachedBoardState = gameWindow.getBoardState()
-            console.log("Board updated, cells:", cachedBoardState.length)
         }
 
         function onConnectionStatusChanged(status) {
             networkStatusLabel.text = status
             messageLabel.text = status
             messageTimer.start()
+        }
+
+        function onNetworkGameChanged() {
+            isNetworkMode = gameWindow.isNetworkGame
         }
     }
 
@@ -44,7 +48,7 @@ ApplicationWindow {
         console.log("=== Component.onCompleted ===")
         gameWindow.startNewGame(0, 0)
         cachedBoardState = gameWindow.getBoardState()
-        console.log("Initial board state loaded, cells:", cachedBoardState.length)
+        isNetworkMode = false
     }
 
     MenuBar {
@@ -62,6 +66,7 @@ ApplicationWindow {
                     statusLabel.text = "Режим: Игрок vs Игрок"
                     cachedBoardState = gameWindow.getBoardState()
                     selectedCell = null
+                    isNetworkMode = false
                 }
             }
             MenuItem {
@@ -71,6 +76,7 @@ ApplicationWindow {
                     statusLabel.text = "Режим: Вы играете белыми"
                     cachedBoardState = gameWindow.getBoardState()
                     selectedCell = null
+                    isNetworkMode = false
                 }
             }
             MenuItem {
@@ -80,15 +86,17 @@ ApplicationWindow {
                     statusLabel.text = "Режим: Вы играете чёрными"
                     cachedBoardState = gameWindow.getBoardState()
                     selectedCell = null
+                    isNetworkMode = false
                 }
             }
             MenuItem {
                 text: "Новая игра (Сетевая)"
                 onTriggered: {
-                    gameWindow.startNewGame(2, 0) // 2 = Network mode
+                    gameWindow.startNewGame(2, 0)
                     statusLabel.text = "Режим: Сетевая игра"
                     cachedBoardState = gameWindow.getBoardState()
                     selectedCell = null
+                    isNetworkMode = true
                 }
             }
         }
@@ -176,7 +184,6 @@ ApplicationWindow {
                             }
                         }
 
-                        // Индикатор возможного хода (пустая клетка)
                         Rectangle {
                             anchors.centerIn: parent
                             width: 22
@@ -186,7 +193,6 @@ ApplicationWindow {
                             visible: cellData ? (cellData.isLegalMove === true && cellData.hasPiece !== true) : false
                         }
 
-                        // Индикатор возможного взятия (клетка с фигурой)
                         Rectangle {
                             anchors.fill: parent
                             anchors.margins: 3
@@ -200,10 +206,39 @@ ApplicationWindow {
                         MouseArea {
                             anchors.fill: parent
                             cursorShape: Qt.PointingHandCursor
+                            enabled: gameWindow.canMakeMove
                             onClicked: {
                                 handleCellClick(row, col, index)
                             }
                         }
+                    }
+                }
+            }
+
+            // Оверлей блокировки доски
+            Rectangle {
+                anchors.fill: parent
+                color: "#80000000"
+                visible: isNetworkMode && !gameWindow.canMakeMove
+                z: 10
+
+                Column {
+                    anchors.centerIn: parent
+                    spacing: 10
+
+                    Text {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        text: "⏳ Ожидание противника..."
+                        font.pixelSize: 24
+                        font.bold: true
+                        color: "white"
+                    }
+
+                    Text {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        text: gameWindow.isServer ? "Ожидание подключения игрока" : "Подключение к серверу..."
+                        font.pixelSize: 14
+                        color: "#cccccc"
                     }
                 }
             }
@@ -252,14 +287,15 @@ ApplicationWindow {
                 }
             }
 
-            // Панель сетевой игры
+            // Панель сетевой игры (показывается ТОЛЬКО в сетевом режиме)
             Rectangle {
                 Layout.fillWidth: true
-                Layout.preferredHeight: 150
+                Layout.preferredHeight: 180
                 color: "#e3f2fd"
                 border.color: "#90caf9"
                 border.width: 1
                 radius: 4
+                visible: isNetworkMode
 
                 ColumnLayout {
                     anchors.fill: parent
@@ -283,6 +319,7 @@ ApplicationWindow {
                             text: "127.0.0.1"
                             font.pixelSize: 12
                             padding: 4
+                            enabled: !gameWindow.isServer
                         }
                     }
 
@@ -297,6 +334,7 @@ ApplicationWindow {
                             validator: IntValidator { bottom: 1024; top: 65535 }
                             font.pixelSize: 12
                             padding: 4
+                            enabled: !gameWindow.canMakeMove
                         }
                     }
 
@@ -306,6 +344,7 @@ ApplicationWindow {
                         Button {
                             text: "Создать"
                             Layout.fillWidth: true
+                            enabled: !gameWindow.canMakeMove && !gameWindow.isServer && !gameWindow.isConnecting
                             onClicked: {
                                 gameWindow.startServer(parseInt(portField.text))
                                 statusLabel.text = "Режим: Сетевая игра (Сервер)"
@@ -314,6 +353,7 @@ ApplicationWindow {
                         Button {
                             text: "Подключиться"
                             Layout.fillWidth: true
+                            enabled: !gameWindow.canMakeMove && !gameWindow.isServer && !gameWindow.isConnecting
                             onClicked: {
                                 gameWindow.connectToServer(ipField.text, parseInt(portField.text))
                                 statusLabel.text = "Режим: Сетевая игра (Клиент)"
@@ -434,15 +474,15 @@ ApplicationWindow {
     }
 
     function handleCellClick(row, col, index) {
-        console.log("Click on:", row, col, "index:", index)
+        if (!gameWindow.canMakeMove) {
+            return
+        }
 
         if (!cachedBoardState || cachedBoardState.length <= index) {
-            console.log("Invalid board state")
             return
         }
 
         var cellData = cachedBoardState[index]
-        console.log("Cell data hasPiece:", cellData ? cellData.hasPiece : "null")
 
         if (selectedCell) {
             if (selectedCell.row === row && selectedCell.col === col) {
@@ -451,11 +491,9 @@ ApplicationWindow {
                 cachedBoardState = gameWindow.getBoardState()
                 return
             }
-            console.log("Making move:", selectedCell.row, selectedCell.col, "->", row, col)
             gameWindow.makeMove(selectedCell.row, selectedCell.col, row, col)
             selectedCell = null
         } else if (cellData && cellData.hasPiece === true) {
-            console.log("Selecting piece at:", row, col)
             selectedCell = {row: row, col: col}
             gameWindow.selectPiece(row, col)
             cachedBoardState = gameWindow.getBoardState()
