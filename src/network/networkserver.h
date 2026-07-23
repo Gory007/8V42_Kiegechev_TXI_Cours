@@ -1,34 +1,45 @@
-#pragma once
+#ifndef NETWORKSERVER_H
+#define NETWORKSERVER_H
 
+#include <QObject>
 #include <QTcpServer>
 #include <QTcpSocket>
-#include <QJsonObject>
-#include <QJsonDocument>
-#include "../move.h"
+#include <vector>
+#include "move.h"
 
-class NetworkServer : public QTcpServer
-{
+class NetworkServer : public QObject {
     Q_OBJECT
 
 public:
-    explicit NetworkServer(QObject *parent = nullptr);
+    NetworkServer(QObject *parent = nullptr);
+    ~NetworkServer();
 
-    bool startServer(quint16 port);
-    void stopServer();
+    void startServer(quint16 port);
     void sendMove(const Move& move);
-    QTcpSocket* clientSocket() const;
+    void sendInitPosition(const std::vector<int>& backRank);
+    
+    void setPendingInitPosition(const std::vector<int>& backRank);
+    
+    QTcpServer* server() const { return m_server; }
+    bool isListening() const { return m_server && m_server->isListening(); }
 
 signals:
-    void clientConnected();
     void moveReceived(const Move& move);
-
-protected:
-    void incomingConnection(qintptr socketDescriptor) override;
+    void clientConnected();
+    void initPositionSent();
 
 private slots:
-    void onClientReadyRead();
+    void onNewConnection();
+    void onClientDisconnected();
+    void onReadyRead();
 
 private:
-    QTcpSocket* m_clientSocket = nullptr;
-    Move parseMoveFromJson(const QJsonObject& json);
+    void readMove(QTcpSocket* socket);
+    void sendInitPositionToClient(QTcpSocket* client);
+
+    QTcpServer* m_server;
+    QTcpSocket* m_clientSocket;
+    std::vector<int> m_pendingInitPosition;
 };
+
+#endif // NETWORKSERVER_H

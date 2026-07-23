@@ -1,30 +1,40 @@
-#pragma once
+#ifndef NETWORKCLIENT_H
+#define NETWORKCLIENT_H
 
+#include <QObject>
 #include <QTcpSocket>
-#include <QJsonObject>
-#include <QJsonDocument>
-#include "../move.h"
+#include <vector>
+#include "move.h"
 
-class NetworkClient : public QTcpSocket
-{
+class NetworkClient : public QObject {
     Q_OBJECT
 
 public:
-    explicit NetworkClient(QObject *parent = nullptr);
+    NetworkClient(QObject *parent = nullptr);
+    ~NetworkClient();
 
     void connectToServer(const QString& ip, quint16 port);
-    void disconnectFromServer();
     void sendMove(const Move& move);
+    
+    QTcpSocket* socket() const { return m_socket; }
+    bool isConnected() const { return m_socket && m_socket->state() == QAbstractSocket::ConnectedState; }
 
 signals:
-    void connectedToServer();
-    void disconnectedFromServer();
     void moveReceived(const Move& move);
-    void connectionError(const QString& error); 
+    void connected();
+    void connectionError(const QString& error);
+    void initPositionReceived(const std::vector<int>& backRank); // НОВЫЙ СИГНАЛ
 
 private slots:
+    void onConnected();
+    void onDisconnected();
+    void onError(QAbstractSocket::SocketError error);
     void onReadyRead();
 
 private:
-    Move parseMoveFromJson(const QJsonObject& json);
+    void readMessage();
+
+    QTcpSocket* m_socket;
 };
+
+#endif // NETWORKCLIENT_H

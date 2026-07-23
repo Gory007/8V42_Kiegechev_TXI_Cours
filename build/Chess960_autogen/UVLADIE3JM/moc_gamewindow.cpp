@@ -61,6 +61,7 @@ template <> constexpr inline auto GameWindow::qt_create_metaobjectdata<qt_meta_t
         "toCol",
         "onConnectionEstablished",
         "onConnectionError",
+        "onBoardUpdated",
         "startNewGame",
         "mode",
         "playerColor",
@@ -130,56 +131,58 @@ template <> constexpr inline auto GameWindow::qt_create_metaobjectdata<qt_meta_t
         QtMocHelpers::SlotData<void(const QString &)>(22, 2, QMC::AccessPrivate, QMetaType::Void, {{
             { QMetaType::QString, 15 },
         }}),
+        // Slot 'onBoardUpdated'
+        QtMocHelpers::SlotData<void()>(23, 2, QMC::AccessPrivate, QMetaType::Void),
         // Method 'startNewGame'
-        QtMocHelpers::MethodData<void(int, int)>(23, 2, QMC::AccessPublic, QMetaType::Void, {{
-            { QMetaType::Int, 24 }, { QMetaType::Int, 25 },
+        QtMocHelpers::MethodData<void(int, int)>(24, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::Int, 25 }, { QMetaType::Int, 26 },
         }}),
         // Method 'makeMove'
-        QtMocHelpers::MethodData<void(int, int, int, int)>(26, 2, QMC::AccessPublic, QMetaType::Void, {{
+        QtMocHelpers::MethodData<void(int, int, int, int)>(27, 2, QMC::AccessPublic, QMetaType::Void, {{
             { QMetaType::Int, 17 }, { QMetaType::Int, 18 }, { QMetaType::Int, 19 }, { QMetaType::Int, 20 },
         }}),
         // Method 'getBoardState'
-        QtMocHelpers::MethodData<QVariantList() const>(27, 2, QMC::AccessPublic, 0x80000000 | 28),
+        QtMocHelpers::MethodData<QVariantList() const>(28, 2, QMC::AccessPublic, 0x80000000 | 29),
         // Method 'getMoveHistory'
-        QtMocHelpers::MethodData<QVariantList() const>(29, 2, QMC::AccessPublic, 0x80000000 | 28),
+        QtMocHelpers::MethodData<QVariantList() const>(30, 2, QMC::AccessPublic, 0x80000000 | 29),
         // Method 'saveGame'
-        QtMocHelpers::MethodData<void(const QString &)>(30, 2, QMC::AccessPublic, QMetaType::Void, {{
-            { QMetaType::QString, 31 },
+        QtMocHelpers::MethodData<void(const QString &)>(31, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::QString, 32 },
         }}),
         // Method 'selectPiece'
-        QtMocHelpers::MethodData<void(int, int)>(32, 2, QMC::AccessPublic, QMetaType::Void, {{
-            { QMetaType::Int, 33 }, { QMetaType::Int, 34 },
+        QtMocHelpers::MethodData<void(int, int)>(33, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::Int, 34 }, { QMetaType::Int, 35 },
         }}),
         // Method 'clearSelection'
-        QtMocHelpers::MethodData<void()>(35, 2, QMC::AccessPublic, QMetaType::Void),
+        QtMocHelpers::MethodData<void()>(36, 2, QMC::AccessPublic, QMetaType::Void),
         // Method 'startServer'
-        QtMocHelpers::MethodData<void(int)>(36, 2, QMC::AccessPublic, QMetaType::Void, {{
-            { QMetaType::Int, 37 },
+        QtMocHelpers::MethodData<void(int)>(37, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::Int, 38 },
         }}),
         // Method 'connectToServer'
-        QtMocHelpers::MethodData<void(const QString &, int)>(38, 2, QMC::AccessPublic, QMetaType::Void, {{
-            { QMetaType::QString, 39 }, { QMetaType::Int, 37 },
+        QtMocHelpers::MethodData<void(const QString &, int)>(39, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::QString, 40 }, { QMetaType::Int, 38 },
         }}),
     };
     QtMocHelpers::UintData qt_properties {
         // property 'currentPlayer'
-        QtMocHelpers::PropertyData<Color>(40, 0x80000000 | 41, QMC::DefaultPropertyFlags | QMC::EnumOrFlag, 0),
+        QtMocHelpers::PropertyData<Color>(41, 0x80000000 | 42, QMC::DefaultPropertyFlags | QMC::EnumOrFlag, 0),
         // property 'gameState'
-        QtMocHelpers::PropertyData<GameState>(42, 0x80000000 | 43, QMC::DefaultPropertyFlags | QMC::EnumOrFlag, 1),
+        QtMocHelpers::PropertyData<GameState>(43, 0x80000000 | 44, QMC::DefaultPropertyFlags | QMC::EnumOrFlag, 1),
         // property 'moveHistory'
-        QtMocHelpers::PropertyData<QVariantList>(44, 0x80000000 | 28, QMC::DefaultPropertyFlags | QMC::EnumOrFlag, 4),
+        QtMocHelpers::PropertyData<QVariantList>(45, 0x80000000 | 29, QMC::DefaultPropertyFlags | QMC::EnumOrFlag, 4),
         // property 'isNetworkGame'
-        QtMocHelpers::PropertyData<bool>(45, QMetaType::Bool, QMC::DefaultPropertyFlags, 5),
-        // property 'isServer'
         QtMocHelpers::PropertyData<bool>(46, QMetaType::Bool, QMC::DefaultPropertyFlags, 5),
+        // property 'isServer'
+        QtMocHelpers::PropertyData<bool>(47, QMetaType::Bool, QMC::DefaultPropertyFlags, 5),
         // property 'canMakeMove'
-        QtMocHelpers::PropertyData<bool>(47, QMetaType::Bool, QMC::DefaultPropertyFlags, 7),
+        QtMocHelpers::PropertyData<bool>(48, QMetaType::Bool, QMC::DefaultPropertyFlags, 7),
         // property 'isConnected'
-        QtMocHelpers::PropertyData<bool>(48, QMetaType::Bool, QMC::DefaultPropertyFlags, 6),
+        QtMocHelpers::PropertyData<bool>(49, QMetaType::Bool, QMC::DefaultPropertyFlags, 6),
         // property 'isConnecting'
-        QtMocHelpers::PropertyData<bool>(49, QMetaType::Bool, QMC::DefaultPropertyFlags, 9),
+        QtMocHelpers::PropertyData<bool>(50, QMetaType::Bool, QMC::DefaultPropertyFlags, 9),
         // property 'myColor'
-        QtMocHelpers::PropertyData<Color>(50, 0x80000000 | 41, QMC::DefaultPropertyFlags | QMC::EnumOrFlag, 8),
+        QtMocHelpers::PropertyData<Color>(51, 0x80000000 | 42, QMC::DefaultPropertyFlags | QMC::EnumOrFlag, 8),
     };
     QtMocHelpers::UintData qt_enums {
     };
@@ -215,17 +218,18 @@ void GameWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 11: _t->onNetworkMoveReceived((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[4]))); break;
         case 12: _t->onConnectionEstablished(); break;
         case 13: _t->onConnectionError((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
-        case 14: _t->startNewGame((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2]))); break;
-        case 15: _t->makeMove((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[4]))); break;
-        case 16: { QVariantList _r = _t->getBoardState();
+        case 14: _t->onBoardUpdated(); break;
+        case 15: _t->startNewGame((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2]))); break;
+        case 16: _t->makeMove((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[4]))); break;
+        case 17: { QVariantList _r = _t->getBoardState();
             if (_a[0]) *reinterpret_cast< QVariantList*>(_a[0]) = std::move(_r); }  break;
-        case 17: { QVariantList _r = _t->getMoveHistory();
+        case 18: { QVariantList _r = _t->getMoveHistory();
             if (_a[0]) *reinterpret_cast< QVariantList*>(_a[0]) = std::move(_r); }  break;
-        case 18: _t->saveGame((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
-        case 19: _t->selectPiece((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2]))); break;
-        case 20: _t->clearSelection(); break;
-        case 21: _t->startServer((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
-        case 22: _t->connectToServer((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2]))); break;
+        case 19: _t->saveGame((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 20: _t->selectPiece((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2]))); break;
+        case 21: _t->clearSelection(); break;
+        case 22: _t->startServer((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 23: _t->connectToServer((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2]))); break;
         default: ;
         }
     }
@@ -289,14 +293,14 @@ int GameWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 23)
+        if (_id < 24)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 23;
+        _id -= 24;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 23)
+        if (_id < 24)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 23;
+        _id -= 24;
     }
     if (_c == QMetaObject::ReadProperty || _c == QMetaObject::WriteProperty
             || _c == QMetaObject::ResetProperty || _c == QMetaObject::BindableProperty

@@ -39,32 +39,48 @@ template <> constexpr inline auto NetworkClient::qt_create_metaobjectdata<qt_met
     namespace QMC = QtMocConstants;
     QtMocHelpers::StringRefStorage qt_stringData {
         "NetworkClient",
-        "connectedToServer",
-        "",
-        "disconnectedFromServer",
         "moveReceived",
+        "",
         "Move",
         "move",
+        "connected",
         "connectionError",
         "error",
+        "initPositionReceived",
+        "std::vector<int>",
+        "backRank",
+        "onConnected",
+        "onDisconnected",
+        "onError",
+        "QAbstractSocket::SocketError",
         "onReadyRead"
     };
 
     QtMocHelpers::UintData qt_methods {
-        // Signal 'connectedToServer'
-        QtMocHelpers::SignalData<void()>(1, 2, QMC::AccessPublic, QMetaType::Void),
-        // Signal 'disconnectedFromServer'
-        QtMocHelpers::SignalData<void()>(3, 2, QMC::AccessPublic, QMetaType::Void),
         // Signal 'moveReceived'
-        QtMocHelpers::SignalData<void(const Move &)>(4, 2, QMC::AccessPublic, QMetaType::Void, {{
-            { 0x80000000 | 5, 6 },
+        QtMocHelpers::SignalData<void(const Move &)>(1, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { 0x80000000 | 3, 4 },
         }}),
+        // Signal 'connected'
+        QtMocHelpers::SignalData<void()>(5, 2, QMC::AccessPublic, QMetaType::Void),
         // Signal 'connectionError'
-        QtMocHelpers::SignalData<void(const QString &)>(7, 2, QMC::AccessPublic, QMetaType::Void, {{
-            { QMetaType::QString, 8 },
+        QtMocHelpers::SignalData<void(const QString &)>(6, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::QString, 7 },
+        }}),
+        // Signal 'initPositionReceived'
+        QtMocHelpers::SignalData<void(const std::vector<int> &)>(8, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { 0x80000000 | 9, 10 },
+        }}),
+        // Slot 'onConnected'
+        QtMocHelpers::SlotData<void()>(11, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'onDisconnected'
+        QtMocHelpers::SlotData<void()>(12, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'onError'
+        QtMocHelpers::SlotData<void(QAbstractSocket::SocketError)>(13, 2, QMC::AccessPrivate, QMetaType::Void, {{
+            { 0x80000000 | 14, 7 },
         }}),
         // Slot 'onReadyRead'
-        QtMocHelpers::SlotData<void()>(9, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(15, 2, QMC::AccessPrivate, QMetaType::Void),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -74,7 +90,7 @@ template <> constexpr inline auto NetworkClient::qt_create_metaobjectdata<qt_met
             qt_methods, qt_properties, qt_enums);
 }
 Q_CONSTINIT const QMetaObject NetworkClient::staticMetaObject = { {
-    QMetaObject::SuperData::link<QTcpSocket::staticMetaObject>(),
+    QMetaObject::SuperData::link<QObject::staticMetaObject>(),
     qt_staticMetaObjectStaticContent<qt_meta_tag_ZN13NetworkClientE_t>.stringdata,
     qt_staticMetaObjectStaticContent<qt_meta_tag_ZN13NetworkClientE_t>.data,
     qt_static_metacall,
@@ -88,22 +104,37 @@ void NetworkClient::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _i
     auto *_t = static_cast<NetworkClient *>(_o);
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
-        case 0: _t->connectedToServer(); break;
-        case 1: _t->disconnectedFromServer(); break;
-        case 2: _t->moveReceived((*reinterpret_cast< std::add_pointer_t<Move>>(_a[1]))); break;
-        case 3: _t->connectionError((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
-        case 4: _t->onReadyRead(); break;
+        case 0: _t->moveReceived((*reinterpret_cast< std::add_pointer_t<Move>>(_a[1]))); break;
+        case 1: _t->connected(); break;
+        case 2: _t->connectionError((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 3: _t->initPositionReceived((*reinterpret_cast< std::add_pointer_t<std::vector<int>>>(_a[1]))); break;
+        case 4: _t->onConnected(); break;
+        case 5: _t->onDisconnected(); break;
+        case 6: _t->onError((*reinterpret_cast< std::add_pointer_t<QAbstractSocket::SocketError>>(_a[1]))); break;
+        case 7: _t->onReadyRead(); break;
         default: ;
         }
     }
+    if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
+        switch (_id) {
+        default: *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType(); break;
+        case 6:
+            switch (*reinterpret_cast<int*>(_a[1])) {
+            default: *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType(); break;
+            case 0:
+                *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType::fromType< QAbstractSocket::SocketError >(); break;
+            }
+            break;
+        }
+    }
     if (_c == QMetaObject::IndexOfMethod) {
-        if (QtMocHelpers::indexOfMethod<void (NetworkClient::*)()>(_a, &NetworkClient::connectedToServer, 0))
+        if (QtMocHelpers::indexOfMethod<void (NetworkClient::*)(const Move & )>(_a, &NetworkClient::moveReceived, 0))
             return;
-        if (QtMocHelpers::indexOfMethod<void (NetworkClient::*)()>(_a, &NetworkClient::disconnectedFromServer, 1))
+        if (QtMocHelpers::indexOfMethod<void (NetworkClient::*)()>(_a, &NetworkClient::connected, 1))
             return;
-        if (QtMocHelpers::indexOfMethod<void (NetworkClient::*)(const Move & )>(_a, &NetworkClient::moveReceived, 2))
+        if (QtMocHelpers::indexOfMethod<void (NetworkClient::*)(const QString & )>(_a, &NetworkClient::connectionError, 2))
             return;
-        if (QtMocHelpers::indexOfMethod<void (NetworkClient::*)(const QString & )>(_a, &NetworkClient::connectionError, 3))
+        if (QtMocHelpers::indexOfMethod<void (NetworkClient::*)(const std::vector<int> & )>(_a, &NetworkClient::initPositionReceived, 3))
             return;
     }
 }
@@ -118,47 +149,47 @@ void *NetworkClient::qt_metacast(const char *_clname)
     if (!_clname) return nullptr;
     if (!strcmp(_clname, qt_staticMetaObjectStaticContent<qt_meta_tag_ZN13NetworkClientE_t>.strings))
         return static_cast<void*>(this);
-    return QTcpSocket::qt_metacast(_clname);
+    return QObject::qt_metacast(_clname);
 }
 
 int NetworkClient::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
-    _id = QTcpSocket::qt_metacall(_c, _id, _a);
+    _id = QObject::qt_metacall(_c, _id, _a);
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 5)
+        if (_id < 8)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 5;
+        _id -= 8;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 5)
-            *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 5;
+        if (_id < 8)
+            qt_static_metacall(this, _c, _id, _a);
+        _id -= 8;
     }
     return _id;
 }
 
 // SIGNAL 0
-void NetworkClient::connectedToServer()
+void NetworkClient::moveReceived(const Move & _t1)
 {
-    QMetaObject::activate(this, &staticMetaObject, 0, nullptr);
+    QMetaObject::activate<void>(this, &staticMetaObject, 0, nullptr, _t1);
 }
 
 // SIGNAL 1
-void NetworkClient::disconnectedFromServer()
+void NetworkClient::connected()
 {
     QMetaObject::activate(this, &staticMetaObject, 1, nullptr);
 }
 
 // SIGNAL 2
-void NetworkClient::moveReceived(const Move & _t1)
+void NetworkClient::connectionError(const QString & _t1)
 {
     QMetaObject::activate<void>(this, &staticMetaObject, 2, nullptr, _t1);
 }
 
 // SIGNAL 3
-void NetworkClient::connectionError(const QString & _t1)
+void NetworkClient::initPositionReceived(const std::vector<int> & _t1)
 {
     QMetaObject::activate<void>(this, &staticMetaObject, 3, nullptr, _t1);
 }

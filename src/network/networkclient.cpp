@@ -1,76 +1,123 @@
 #include "networkclient.h"
+#include <QDebug>
+#include <QDataStream>
 
 NetworkClient::NetworkClient(QObject *parent)
-    : QTcpSocket(parent)
+    : QObject(parent)
+    , m_socket(new QTcpSocket(this))
 {
-    connect(this, &QTcpSocket::connected, this, &NetworkClient::connectedToServer);
-    connect(this, &QTcpSocket::disconnected, this, &NetworkClient::disconnectedFromServer);
-    connect(this, &QTcpSocket::readyRead, this, &NetworkClient::onReadyRead);
-
-    // Обработка ошибок подключения
-    connect(this, &QTcpSocket::errorOccurred, this, [this](QAbstractSocket::SocketError socketError) {
-        Q_UNUSED(socketError);
-        QString errorMsg = this->errorString();
-        qWarning() << "NetworkClient error:" << errorMsg;
-        emit connectionError(errorMsg);
-    });
+    connect(m_socket, &QTcpSocket::connected, this, &NetworkClient::onConnected);
+    connect(m_socket, &QTcpSocket::disconnected, this, &NetworkClient::onDisconnected);
+    connect(m_socket, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::errorOccurred),
+            this, &NetworkClient::onError);
+    connect(m_socket, &QTcpSocket::readyRead, this, &NetworkClient::onReadyRead);
 }
 
-void NetworkClient::connectToServer(const QString &ip, quint16 port)
-{
-    connectToHost(ip, port);
-}
-
-void NetworkClient::disconnectFromServer()
-{
-    disconnectFromHost();
-}
-
-void NetworkClient::sendMove(const Move &move)
-{
-    QJsonObject json;
-    json["type"] = "move";
-    json["from_row"] = move.from.row;
-    json["from_col"] = move.from.col;
-    json["to_row"] = move.to.row;
-    json["to_col"] = move.to.col;
-    json["piece"] = static_cast<int>(move.piece);
-    json["captured"] = static_cast<int>(move.captured);
-    json["is_castling"] = move.isCastling;
-    json["is_promotion"] = move.isPromotion;
-
-    QJsonDocument doc(json);
-    write(doc.toJson(QJsonDocument::Compact));
-    write("\n");
-    flush();
-}
-
-void NetworkClient::onReadyRead()
-{
-    QByteArray data = readAll();
-    QString strData = QString::fromUtf8(data);
-    QStringList lines = strData.split('\n', Qt::SkipEmptyParts);
-
-    for (const QString& line : lines) {
-        QJsonDocument doc = QJsonDocument::fromJson(line.toUtf8());
-        if (doc.isNull()) continue;
-
-        QJsonObject json = doc.object();
-        if (json["type"] == "move") {
-            Move move = parseMoveFromJson(json);
-            emit moveReceived(move);
-        }
+NetworkClient::~NetworkClient() {
+    if (m_socket->state() == QAbstractSocket::ConnectedState) {
+        m_socket->disconnectFromHost();
     }
 }
 
-Move NetworkClient::parseMoveFromJson(const QJsonObject &json)
-{
-    Position from(json["from_row"].toInt(), json["from_col"].toInt());
-    Position to(json["to_row"].toInt(), json["to_col"].toInt());
-    PieceType piece = static_cast<PieceType>(json["piece"].toInt());
-    PieceType captured = static_cast<PieceType>(json["captured"].toInt());
-    bool isCastling = json["is_castling"].toBool();
-    bool isPromotion = json["is_promotion"].toBool();
+void NetworkClient::connectToServer(const QString& ip, quint16 port) {
+    qDebug() << "Connecting to" << ip << ":" << port;
+    m_socket->connectToHost(ip, port);
+}
 
-    return Move(from, to, piece, captured, isCastling, isPromotion);
+void NetworkClient::onConnected() {
+    qDebug() << "Connected to server";
+    emit connected();
+}
+
+void NetworkClient::onDisconnected() {
+    qDebug() << "Disconnected from server";
+}
+
+void NetworkClient::onError(QAbstractSocket::SocketError error) {
+    QString errorMsg = m_socket->errorString();
+    qDebug() << "Socket error:" << errorMsg;
+    emit connectionError(errorMsg);
+}
+
+void NetworkClient::onReadyRead() {
+    readMessage();
+}
+
+void NetworkClient::readMessage() {
+    QDataStream in(m_socket);
+    in.setVersion(QDataStream::Qt_5_12);
+
+    if (m_socket->bytesAvailable() < (int)sizeof(quint16)) {
+        return;
+    }
+
+    quint16 msgSize;
+    in >> msgSize;
+
+    if (m_socket->bytesAvailable() < msgSize) {
+        return;
+    }
+
+    // Читаем маркер сообщения
+    QString messageType;
+    in >> messageType;
+
+    if (messageType == "INIT") {
+        // Читаем начальную позицию
+        qint32 size;
+        in >> size;
+        
+        std::vector<int> backRank;
+        for (qint32 i = 0; i < size; ++i) {
+            qint32 piece;
+            in >> piece;
+            backRank.push_back(static_cast<int>(piece));
+        }
+        
+        qDebug() << "Received initial position from server, size:" << backRank.size();
+        emit initPositionReceived(backRank);
+        return;
+    }
+
+    if (messageType == "MOVE") {
+        // Читаем ход
+        int fromRow, fromCol, toRow, toCol;
+        int pieceType, capturedType;
+        bool isCastling, isPromotion;
+
+        in >> fromRow >> fromCol >> toRow >> toCol;
+        in >> pieceType >> capturedType >> isCastling >> isPromotion;
+
+        Move move(Position(fromRow, fromCol), Position(toRow, toCol),
+                  static_cast<PieceType>(pieceType), static_cast<PieceType>(capturedType),
+                  isCastling, isPromotion);
+
+        emit moveReceived(move);
+        return;
+    }
+
+    qDebug() << "Unknown message type:" << messageType;
+}
+
+void NetworkClient::sendMove(const Move& move) {
+    if (m_socket->state() != QAbstractSocket::ConnectedState) {
+        qDebug() << "Cannot send move: not connected";
+        return;
+    }
+
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_5_12);
+
+    out << quint16(0);
+    out << QString("MOVE"); // ДОБАВЛЕН МАРКЕР
+    out << move.from.row << move.from.col << move.to.row << move.to.col;
+    out << static_cast<int>(move.piece) << static_cast<int>(move.captured);
+    out << move.isCastling << move.isPromotion;
+
+    out.device()->seek(0);
+    out << quint16(block.size() - sizeof(quint16));
+
+    m_socket->write(block);
+    qDebug() << "Move sent to server:" << move.from.row << move.from.col << "->" << move.to.row << move.to.col;
 }

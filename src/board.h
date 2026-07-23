@@ -3,6 +3,7 @@
 
 #include "piece.h"
 #include "position.h"
+#include <vector>
 
 class Board {
 public:
@@ -19,15 +20,16 @@ public:
     bool isSquareAttacked(Position pos, Color byColor) const;
     Position findKing(Color color) const;
 
-    void generateInitialPosition(); // Генерация случайной расстановки Chess960
+    // ИЗМЕНЕНО: теперь возвращает backRank для отправки по сети
+    std::vector<int> generateInitialPosition(); 
+    // НОВЫЙ МЕТОД: для установки позиции, полученной от сервера
+    void setInitialPosition(const std::vector<int>& backRank); 
+    
     void clearBoard();
-
     std::vector<int> generateRandomChess960Position();
 
 private:
-    // Вспомогательная функция для проверки, что слоны на разных цветах
     bool areBishopsOnDifferentColors(const std::vector<int>& position) const;
-    // Вспомогательная функция для проверки, что король между ладьями
     bool isKingBetweenRooks(const std::vector<int>& position) const;
 };
 

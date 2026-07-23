@@ -2,7 +2,8 @@
 #define GAMECONTROLLER_H
 
 #include <QObject>
-#include <QString>
+#include <vector>
+#include <QTimer>
 #include "board.h"
 #include "movehistory.h"
 #include "aiplayer.h"
@@ -40,11 +41,15 @@ public:
     bool validateMove(Position from, Position to) const;
     GameState checkGameState() const;
     void saveHistoryToFile(const std::string& path);
+    
+    // НОВЫЙ МЕТОД: для принудительного хода ИИ (исправление бага с первым ходом)
+    void makeAiMove(); 
 
     // Сетевые методы
     void startServer(quint16 port);
     void connectToServer(const QString& ip, quint16 port);
     void handleNetworkMove(const Move& move);
+    void handleNetworkInit(const std::vector<int>& backRank); // НОВЫЙ МЕТОД: применение позиции от сервера
 
     // Геттеры для UI
     Color getCurrentPlayer() const { return currentPlayer; }
@@ -53,9 +58,11 @@ public:
 signals:
     void networkMoveReceived(int fromRow, int fromCol, int toRow, int toCol);
     void connectionEstablished();
+    void boardUpdated(); // Сигнал для обновления UI после изменения доски
 
 private slots:
     void onNetworkMoveReceived(const Move& move);
+    void onNetworkInitReceived(const std::vector<int>& backRank); // НОВЫЙ СЛОТ
 };
 
 #endif // GAMECONTROLLER_H

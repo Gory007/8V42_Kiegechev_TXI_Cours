@@ -46,9 +46,13 @@ template <> constexpr inline auto GameController::qt_create_metaobjectdata<qt_me
         "toRow",
         "toCol",
         "connectionEstablished",
+        "boardUpdated",
         "onNetworkMoveReceived",
         "Move",
-        "move"
+        "move",
+        "onNetworkInitReceived",
+        "std::vector<int>",
+        "backRank"
     };
 
     QtMocHelpers::UintData qt_methods {
@@ -58,9 +62,15 @@ template <> constexpr inline auto GameController::qt_create_metaobjectdata<qt_me
         }}),
         // Signal 'connectionEstablished'
         QtMocHelpers::SignalData<void()>(7, 2, QMC::AccessPublic, QMetaType::Void),
+        // Signal 'boardUpdated'
+        QtMocHelpers::SignalData<void()>(8, 2, QMC::AccessPublic, QMetaType::Void),
         // Slot 'onNetworkMoveReceived'
-        QtMocHelpers::SlotData<void(const Move &)>(8, 2, QMC::AccessPrivate, QMetaType::Void, {{
-            { 0x80000000 | 9, 10 },
+        QtMocHelpers::SlotData<void(const Move &)>(9, 2, QMC::AccessPrivate, QMetaType::Void, {{
+            { 0x80000000 | 10, 11 },
+        }}),
+        // Slot 'onNetworkInitReceived'
+        QtMocHelpers::SlotData<void(const std::vector<int> &)>(12, 2, QMC::AccessPrivate, QMetaType::Void, {{
+            { 0x80000000 | 13, 14 },
         }}),
     };
     QtMocHelpers::UintData qt_properties {
@@ -87,7 +97,9 @@ void GameController::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
         switch (_id) {
         case 0: _t->networkMoveReceived((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[4]))); break;
         case 1: _t->connectionEstablished(); break;
-        case 2: _t->onNetworkMoveReceived((*reinterpret_cast< std::add_pointer_t<Move>>(_a[1]))); break;
+        case 2: _t->boardUpdated(); break;
+        case 3: _t->onNetworkMoveReceived((*reinterpret_cast< std::add_pointer_t<Move>>(_a[1]))); break;
+        case 4: _t->onNetworkInitReceived((*reinterpret_cast< std::add_pointer_t<std::vector<int>>>(_a[1]))); break;
         default: ;
         }
     }
@@ -95,6 +107,8 @@ void GameController::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
         if (QtMocHelpers::indexOfMethod<void (GameController::*)(int , int , int , int )>(_a, &GameController::networkMoveReceived, 0))
             return;
         if (QtMocHelpers::indexOfMethod<void (GameController::*)()>(_a, &GameController::connectionEstablished, 1))
+            return;
+        if (QtMocHelpers::indexOfMethod<void (GameController::*)()>(_a, &GameController::boardUpdated, 2))
             return;
     }
 }
@@ -118,14 +132,14 @@ int GameController::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 3)
+        if (_id < 5)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 3;
+        _id -= 5;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 3)
+        if (_id < 5)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 3;
+        _id -= 5;
     }
     return _id;
 }
@@ -140,5 +154,11 @@ void GameController::networkMoveReceived(int _t1, int _t2, int _t3, int _t4)
 void GameController::connectionEstablished()
 {
     QMetaObject::activate(this, &staticMetaObject, 1, nullptr);
+}
+
+// SIGNAL 2
+void GameController::boardUpdated()
+{
+    QMetaObject::activate(this, &staticMetaObject, 2, nullptr);
 }
 QT_WARNING_POP

@@ -9,6 +9,8 @@ GameWindow::GameWindow(QObject *parent)
             this, &GameWindow::onNetworkMoveReceived);
     connect(&controller, &GameController::connectionEstablished,
             this, &GameWindow::onConnectionEstablished);
+    connect(&controller, &GameController::boardUpdated,
+            this, &GameWindow::onBoardUpdated);
 
     if (controller.networkManager && controller.networkManager->client()) {
         connect(controller.networkManager->client(), &NetworkClient::connectionError,
@@ -41,15 +43,20 @@ void GameWindow::startNewGame(int mode, int playerColor) {
     emit myColorChanged();
     emit isConnectingChanged();
     emit connectionStatusChanged("");
+
+    // Если мы играем черными против ИИ, белые (ИИ) должны сделать первый ход автоматически
+    if (gameMode == GameMode::PvAI && controller.getCurrentPlayer() != color) {
+        // Даем небольшую задержку, чтобы UI успел отрисовать стартовую позицию
+        QTimer::singleShot(500, &controller, &GameController::makeAiMove);
+    }
 }
 
 void GameWindow::startServer(int port) {
-    // ЗАЩИТА: Игнорируем нажатие, если уже пытаемся подключиться или игра уже идет
     if (isAttemptingConnection || isConnectionReady) {
         emit messageShown("Сервер уже создается или игра уже началась");
         return;
     }
-    
+
     controller.startServer(port);
     isConnectionReady = false;
     myColor = Color::White;
@@ -67,12 +74,11 @@ void GameWindow::startServer(int port) {
 }
 
 void GameWindow::connectToServer(const QString& ip, int port) {
-    // ЗАЩИТА: Игнорируем нажатие, если уже пытаемся подключиться или игра уже идет
     if (isAttemptingConnection || isConnectionReady) {
         emit messageShown("Уже идет попытка подключения или игра уже началась");
         return;
     }
-    
+
     controller.connectToServer(ip, port);
     isConnectionReady = false;
     myColor = Color::Black;
@@ -92,6 +98,7 @@ void GameWindow::connectToServer(const QString& ip, int port) {
 void GameWindow::onConnectionEstablished() {
     isConnectionReady = true;
     isAttemptingConnection = false;
+
     emit connectionStatusChanged("Противник подключен! Игра началась.");
     emit boardUpdated();
     emit canMakeMoveChanged();
@@ -101,6 +108,7 @@ void GameWindow::onConnectionEstablished() {
 void GameWindow::onConnectionError(const QString& error) {
     isConnectionReady = false;
     isAttemptingConnection = false;
+
     emit connectionStatusChanged("Ошибка: " + error);
     emit messageShown("Ошибка подключения: " + error);
     emit canMakeMoveChanged();
@@ -109,6 +117,7 @@ void GameWindow::onConnectionError(const QString& error) {
 
 void GameWindow::onNetworkMoveReceived(int fromRow, int fromCol, int toRow, int toCol) {
     GameState state = controller.checkGameState();
+
     if (state == GameState::Check) emit messageShown("Шах!");
     else if (state == GameState::Checkmate) {
         QString winner = (controller.getCurrentPlayer() == Color::White) ? "Чёрные" : "Белые";
@@ -124,21 +133,33 @@ void GameWindow::onNetworkMoveReceived(int fromRow, int fromCol, int toRow, int 
     emit canMakeMoveChanged();
 }
 
+// ИСПРАВЛЕНИЕ ГЛАВНОЙ ОШИБКИ С ИИ:
+void GameWindow::onBoardUpdated() {
+    emit boardUpdated();
+    // Когда доска обновляется (в том числе после хода ИИ), мы ОБЯЗАНЫ уведомить UI 
+    // о смене игрока и доступности ходов, иначе интерфейс "зависнет" на ходе ИИ.
+    emit currentPlayerChanged();
+    emit canMakeMoveChanged();
+    emit gameStateChanged();
+    emit historyChanged();
+}
+
 bool GameWindow::canMakeMove() const {
-    if (controller.mode != GameMode::Network) return true;
+    if (controller.mode == GameMode::PvP) return true;
     return isConnectionReady && (controller.getCurrentPlayer() == myColor);
 }
 
 void GameWindow::makeMove(int fromRow, int fromCol, int toRow, int toCol) {
     if (!canMakeMove()) {
-        emit messageShown(controller.mode == GameMode::Network && !isConnectionReady ? 
-                          "Ожидание подключения противника..." : "Сейчас ход противника!");
+        emit messageShown(controller.mode == GameMode::Network && !isConnectionReady ?
+                            "Ожидание подключения противника..." : "Сейчас ход противника!");
         clearSelection();
         return;
     }
 
     if (controller.handleMove(Position(fromRow, fromCol), Position(toRow, toCol))) {
         clearSelection();
+
         GameState state = controller.checkGameState();
         if (state == GameState::Check) emit messageShown("Шах!");
         else if (state == GameState::Checkmate) {
@@ -147,6 +168,7 @@ void GameWindow::makeMove(int fromRow, int fromCol, int toRow, int toCol) {
         } else if (state == GameState::Stalemate) {
             emit messageShown("Пат! Ничья");
         }
+
         emit currentPlayerChanged();
         emit gameStateChanged();
         emit boardUpdated();
@@ -160,13 +182,13 @@ void GameWindow::makeMove(int fromRow, int fromCol, int toRow, int toCol) {
 
 void GameWindow::selectPiece(int row, int col) {
     if (!canMakeMove()) {
-        emit messageShown(controller.mode == GameMode::Network && !isConnectionReady ? 
-                          "Ожидание подключения противника..." : "Сейчас ход противника!");
+        emit messageShown(controller.mode == GameMode::Network && !isConnectionReady ?
+                            "Ожидание подключения противника..." : "Сейчас ход противника!");
         return;
     }
 
     Piece* piece = controller.board.getPiece(Position(row, col));
-    if (piece && piece->color == myColor) {
+    if (piece && piece->color == controller.getCurrentPlayer()) {
         selectedPosition = Position(row, col);
         isPieceSelected = true;
         emit boardUpdated();
@@ -187,13 +209,15 @@ QVariantList GameWindow::getBoardState() const {
 
     if (isPieceSelected && canMakeMove()) {
         Piece* piece = controller.board.getPiece(selectedPosition);
-        if (piece && piece->color == myColor) {
+        if (piece && piece->color == controller.getCurrentPlayer()) {
             std::vector<Position> allMoves = piece->getLegalMoves(controller.board);
             for (const auto& to : allMoves) {
                 Board tempBoard = controller.board.clone();
                 tempBoard.movePiece(selectedPosition, to);
-                Position kingPos = tempBoard.findKing(myColor);
-                Color opponentColor = (myColor == Color::White) ? Color::Black : Color::White;
+
+                Position kingPos = tempBoard.findKing(piece->color);
+                Color opponentColor = (piece->color == Color::White) ? Color::Black : Color::White;
+
                 if (!tempBoard.isSquareAttacked(kingPos, opponentColor)) {
                     legalMoves.push_back(to);
                 }
@@ -220,13 +244,13 @@ QVariantList GameWindow::getBoardState() const {
                 cellData["hasPiece"] = true;
                 cellData["color"] = (piece->color == Color::White) ? "white" : "black";
                 switch (piece->getType()) {
-                    case PieceType::King: cellData["type"] = "king"; break;
-                    case PieceType::Queen: cellData["type"] = "queen"; break;
-                    case PieceType::Rook: cellData["type"] = "rook"; break;
-                    case PieceType::Bishop: cellData["type"] = "bishop"; break;
-                    case PieceType::Knight: cellData["type"] = "knight"; break;
-                    case PieceType::Pawn: cellData["type"] = "pawn"; break;
-                    default: cellData["type"] = ""; break;
+                case PieceType::King: cellData["type"] = "king"; break;
+                case PieceType::Queen: cellData["type"] = "queen"; break;
+                case PieceType::Rook: cellData["type"] = "rook"; break;
+                case PieceType::Bishop: cellData["type"] = "bishop"; break;
+                case PieceType::Knight: cellData["type"] = "knight"; break;
+                case PieceType::Pawn: cellData["type"] = "pawn"; break;
+                default: cellData["type"] = ""; break;
                 }
             }
 
@@ -240,10 +264,12 @@ QVariantList GameWindow::getBoardState() const {
                     break;
                 }
             }
+
             row.append(cellData);
         }
         boardState.append(row);
     }
+
     return boardState;
 }
 
