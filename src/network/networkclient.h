@@ -15,6 +15,7 @@ public:
 
     void connectToServer(const QString& ip, quint16 port);
     void sendMove(const Move& move);
+    void disconnectFromServer(); // НОВЫЙ МЕТОД: явное отключение
     
     QTcpSocket* socket() const { return m_socket; }
     bool isConnected() const { return m_socket && m_socket->state() == QAbstractSocket::ConnectedState; }
@@ -23,7 +24,8 @@ signals:
     void moveReceived(const Move& move);
     void connected();
     void connectionError(const QString& error);
-    void initPositionReceived(const std::vector<int>& backRank); // НОВЫЙ СИГНАЛ
+    void disconnected(); // НОВЫЙ СИГНАЛ
+    void initPositionReceived(const std::vector<int>& backRank);
 
 private slots:
     void onConnected();

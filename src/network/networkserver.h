@@ -15,9 +15,9 @@ public:
     ~NetworkServer();
 
     void startServer(quint16 port);
+    void stopServer(); // НОВЫЙ МЕТОД: остановить сервер
     void sendMove(const Move& move);
     void sendInitPosition(const std::vector<int>& backRank);
-    
     void setPendingInitPosition(const std::vector<int>& backRank);
     
     QTcpServer* server() const { return m_server; }
@@ -26,6 +26,7 @@ public:
 signals:
     void moveReceived(const Move& move);
     void clientConnected();
+    void clientDisconnected(); // НОВЫЙ СИГНАЛ
     void initPositionSent();
 
 private slots:

@@ -42,27 +42,26 @@ public:
     GameState checkGameState() const;
     void saveHistoryToFile(const std::string& path);
     
-    // НОВЫЙ МЕТОД: для принудительного хода ИИ (исправление бага с первым ходом)
     void makeAiMove(); 
 
-    // Сетевые методы
     void startServer(quint16 port);
     void connectToServer(const QString& ip, quint16 port);
     void handleNetworkMove(const Move& move);
-    void handleNetworkInit(const std::vector<int>& backRank); // НОВЫЙ МЕТОД: применение позиции от сервера
+    void handleNetworkInit(const std::vector<int>& backRank);
 
-    // Геттеры для UI
     Color getCurrentPlayer() const { return currentPlayer; }
     const Board& getBoard() const { return board; }
 
 signals:
     void networkMoveReceived(int fromRow, int fromCol, int toRow, int toCol);
     void connectionEstablished();
-    void boardUpdated(); // Сигнал для обновления UI после изменения доски
+    void boardUpdated();
+    void networkGameEnded(const QString& reason); // НОВЫЙ СИГНАЛ: уведомить UI о разрыве
 
 private slots:
     void onNetworkMoveReceived(const Move& move);
-    void onNetworkInitReceived(const std::vector<int>& backRank); // НОВЫЙ СЛОТ
+    void onNetworkInitReceived(const std::vector<int>& backRank);
+    void onNetworkDisconnected(); // НОВЫЙ СЛОТ
 };
 
 #endif // GAMECONTROLLER_H

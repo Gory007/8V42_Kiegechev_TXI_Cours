@@ -11,9 +11,7 @@ NetworkServer::NetworkServer(QObject *parent)
 }
 
 NetworkServer::~NetworkServer() {
-    if (m_clientSocket) {
-        m_clientSocket->disconnectFromHost();
-    }
+    stopServer();
 }
 
 void NetworkServer::startServer(quint16 port) {
@@ -24,6 +22,17 @@ void NetworkServer::startServer(quint16 port) {
     qDebug() << "Server started on port" << port;
 }
 
+void NetworkServer::stopServer() {
+    if (m_clientSocket) {
+        m_clientSocket->disconnectFromHost();
+        m_clientSocket = nullptr;
+    }
+    if (m_server->isListening()) {
+        m_server->close();
+        qDebug() << "Server stopped";
+    }
+}
+
 void NetworkServer::onNewConnection() {
     m_clientSocket = m_server->nextPendingConnection();
     connect(m_clientSocket, &QTcpSocket::disconnected, this, &NetworkServer::onClientDisconnected);
@@ -32,13 +41,13 @@ void NetworkServer::onNewConnection() {
     qDebug() << "Client connected";
     emit clientConnected();
     
-    // Отправляем начальную позицию клиенту
     sendInitPositionToClient(m_clientSocket);
 }
 
 void NetworkServer::onClientDisconnected() {
     qDebug() << "Client disconnected";
     m_clientSocket = nullptr;
+    emit clientDisconnected(); // НОВЫЙ СИГНАЛ
 }
 
 void NetworkServer::onReadyRead() {
@@ -60,7 +69,6 @@ void NetworkServer::readMove(QTcpSocket* socket) {
         return;
     }
 
-    // Читаем маркер сообщения
     QString messageType;
     in >> messageType;
 
@@ -93,8 +101,8 @@ void NetworkServer::sendMove(const Move& move) {
     QDataStream out(&block, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_5_12);
 
-    out << quint16(0); // placeholder for size
-    out << QString("MOVE"); // ДОБАВЛЕН МАРКЕР
+    out << quint16(0);
+    out << QString("MOVE");
     out << move.from.row << move.from.col << move.to.row << move.to.col;
     out << static_cast<int>(move.piece) << static_cast<int>(move.captured);
     out << move.isCastling << move.isPromotion;

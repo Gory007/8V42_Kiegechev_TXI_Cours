@@ -1,5 +1,6 @@
 #include "gamewindow.h"
 #include <QDebug>
+#include <QTimer>
 
 GameWindow::GameWindow(QObject *parent)
     : QObject(parent), selectedPosition(-1, -1), isPieceSelected(false),
@@ -11,6 +12,10 @@ GameWindow::GameWindow(QObject *parent)
             this, &GameWindow::onConnectionEstablished);
     connect(&controller, &GameController::boardUpdated,
             this, &GameWindow::onBoardUpdated);
+    
+    // НОВОЕ: Подключаем сигнал о завершении сетевой игры (разрыв соединения)
+    connect(&controller, &GameController::networkGameEnded,
+            this, &GameWindow::onNetworkGameEnded);
 
     if (controller.networkManager && controller.networkManager->client()) {
         connect(controller.networkManager->client(), &NetworkClient::connectionError,
@@ -21,6 +26,12 @@ GameWindow::GameWindow(QObject *parent)
 void GameWindow::startNewGame(int mode, int playerColor) {
     GameMode gameMode = (mode == 0) ? GameMode::PvP : ((mode == 1) ? GameMode::PvAI : GameMode::Network);
     Color color = (playerColor == 0) ? Color::White : Color::Black;
+
+    // НОВОЕ: Если мы переключаемся из сетевого режима в локальный, 
+    // обязательно останавливаем сеть, чтобы освободить порты и сокеты.
+    if (controller.mode == GameMode::Network && gameMode != GameMode::Network) {
+        controller.networkManager->stopNetwork();
+    }
 
     controller.startNewGame(gameMode, color);
     clearSelection();
@@ -44,9 +55,7 @@ void GameWindow::startNewGame(int mode, int playerColor) {
     emit isConnectingChanged();
     emit connectionStatusChanged("");
 
-    // Если мы играем черными против ИИ, белые (ИИ) должны сделать первый ход автоматически
     if (gameMode == GameMode::PvAI && controller.getCurrentPlayer() != color) {
-        // Даем небольшую задержку, чтобы UI успел отрисовать стартовую позицию
         QTimer::singleShot(500, &controller, &GameController::makeAiMove);
     }
 }
@@ -115,6 +124,25 @@ void GameWindow::onConnectionError(const QString& error) {
     emit isConnectingChanged();
 }
 
+// НОВАЯ РЕАЛИЗАЦИЯ: Обработка разрыва соединения
+void GameWindow::onNetworkGameEnded(const QString& reason) {
+    qDebug() << "UI: Network game ended -" << reason;
+    
+    // Сбрасываем флаги соединения, чтобы разблокировать интерфейс
+    isConnectionReady = false;
+    isAttemptingConnection = false;
+    
+    // Показываем сообщение пользователю
+    emit messageShown(reason);
+    emit connectionStatusChanged("Игра завершена: " + reason);
+    
+    // Обновляем состояние UI, чтобы можно было сразу начать новую партию
+    emit canMakeMoveChanged();
+    emit isConnectingChanged();
+    emit boardUpdated();
+    emit networkGameChanged();
+}
+
 void GameWindow::onNetworkMoveReceived(int fromRow, int fromCol, int toRow, int toCol) {
     GameState state = controller.checkGameState();
 
@@ -133,11 +161,8 @@ void GameWindow::onNetworkMoveReceived(int fromRow, int fromCol, int toRow, int 
     emit canMakeMoveChanged();
 }
 
-// ИСПРАВЛЕНИЕ ГЛАВНОЙ ОШИБКИ С ИИ:
 void GameWindow::onBoardUpdated() {
     emit boardUpdated();
-    // Когда доска обновляется (в том числе после хода ИИ), мы ОБЯЗАНЫ уведомить UI 
-    // о смене игрока и доступности ходов, иначе интерфейс "зависнет" на ходе ИИ.
     emit currentPlayerChanged();
     emit canMakeMoveChanged();
     emit gameStateChanged();

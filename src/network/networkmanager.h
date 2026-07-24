@@ -17,9 +17,8 @@ public:
     void createServer(quint16 port);
     void connectToHost(const QString& ip, quint16 port);
     void sendMove(const Move& move);
-    
-    // НОВЫЙ МЕТОД: сохраняем позицию для отправки клиенту
     void setPendingInitPosition(const std::vector<int>& backRank);
+    void stopNetwork(); // НОВЫЙ МЕТОД: остановить сеть
 
     NetworkServer* server() const { return m_server; }
     NetworkClient* client() const { return m_client; }
@@ -28,18 +27,20 @@ signals:
     void moveReceived(const Move& move);
     void clientConnected();
     void connectedToServer();
-    void initPositionReceived(const std::vector<int>& backRank); // НОВЫЙ СИГНАЛ
+    void initPositionReceived(const std::vector<int>& backRank);
+    void networkDisconnected(); // НОВЫЙ СИГНАЛ
 
 private slots:
     void onMoveReceived(const Move& move);
     void onClientConnected();
     void onConnectedToServer();
-    void onInitPositionReceived(const std::vector<int>& backRank); // НОВЫЙ СЛОТ
+    void onInitPositionReceived(const std::vector<int>& backRank);
+    void onNetworkDisconnected(); // НОВЫЙ СЛОТ
 
 private:
     NetworkServer* m_server;
     NetworkClient* m_client;
-    std::vector<int> m_pendingInitPosition; // Храним позицию для отправки
+    std::vector<int> m_pendingInitPosition;
 };
 
 #endif // NETWORKMANAGER_H

@@ -8,16 +8,19 @@ NetworkManager::NetworkManager(QObject *parent)
 {
     connect(m_server, &NetworkServer::moveReceived, this, &NetworkManager::onMoveReceived);
     connect(m_server, &NetworkServer::clientConnected, this, &NetworkManager::onClientConnected);
+    connect(m_server, &NetworkServer::clientDisconnected, this, &NetworkManager::onNetworkDisconnected); // НОВОЕ
     connect(m_server, &NetworkServer::initPositionSent, this, [this]() {
         qDebug() << "Initial position sent to client";
     });
 
     connect(m_client, &NetworkClient::moveReceived, this, &NetworkManager::onMoveReceived);
     connect(m_client, &NetworkClient::connected, this, &NetworkManager::onConnectedToServer);
+    connect(m_client, &NetworkClient::disconnected, this, &NetworkManager::onNetworkDisconnected); // НОВОЕ
     connect(m_client, &NetworkClient::initPositionReceived, this, &NetworkManager::onInitPositionReceived);
 }
 
 NetworkManager::~NetworkManager() {
+    stopNetwork();
 }
 
 void NetworkManager::createServer(quint16 port) {
@@ -43,6 +46,12 @@ void NetworkManager::setPendingInitPosition(const std::vector<int>& backRank) {
     }
 }
 
+void NetworkManager::stopNetwork() {
+    m_server->stopServer();
+    m_client->disconnectFromServer();
+    m_pendingInitPosition.clear();
+}
+
 void NetworkManager::onMoveReceived(const Move& move) {
     emit moveReceived(move);
 }
@@ -57,4 +66,9 @@ void NetworkManager::onConnectedToServer() {
 
 void NetworkManager::onInitPositionReceived(const std::vector<int>& backRank) {
     emit initPositionReceived(backRank);
+}
+
+void NetworkManager::onNetworkDisconnected() {
+    qDebug() << "Network disconnected";
+    emit networkDisconnected(); // НОВЫЙ СИГНАЛ
 }

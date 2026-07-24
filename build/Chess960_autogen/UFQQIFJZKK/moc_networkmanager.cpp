@@ -48,10 +48,12 @@ template <> constexpr inline auto NetworkManager::qt_create_metaobjectdata<qt_me
         "initPositionReceived",
         "std::vector<int>",
         "backRank",
+        "networkDisconnected",
         "onMoveReceived",
         "onClientConnected",
         "onConnectedToServer",
-        "onInitPositionReceived"
+        "onInitPositionReceived",
+        "onNetworkDisconnected"
     };
 
     QtMocHelpers::UintData qt_methods {
@@ -67,18 +69,22 @@ template <> constexpr inline auto NetworkManager::qt_create_metaobjectdata<qt_me
         QtMocHelpers::SignalData<void(const std::vector<int> &)>(7, 2, QMC::AccessPublic, QMetaType::Void, {{
             { 0x80000000 | 8, 9 },
         }}),
+        // Signal 'networkDisconnected'
+        QtMocHelpers::SignalData<void()>(10, 2, QMC::AccessPublic, QMetaType::Void),
         // Slot 'onMoveReceived'
-        QtMocHelpers::SlotData<void(const Move &)>(10, 2, QMC::AccessPrivate, QMetaType::Void, {{
+        QtMocHelpers::SlotData<void(const Move &)>(11, 2, QMC::AccessPrivate, QMetaType::Void, {{
             { 0x80000000 | 3, 4 },
         }}),
         // Slot 'onClientConnected'
-        QtMocHelpers::SlotData<void()>(11, 2, QMC::AccessPrivate, QMetaType::Void),
-        // Slot 'onConnectedToServer'
         QtMocHelpers::SlotData<void()>(12, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'onConnectedToServer'
+        QtMocHelpers::SlotData<void()>(13, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'onInitPositionReceived'
-        QtMocHelpers::SlotData<void(const std::vector<int> &)>(13, 2, QMC::AccessPrivate, QMetaType::Void, {{
+        QtMocHelpers::SlotData<void(const std::vector<int> &)>(14, 2, QMC::AccessPrivate, QMetaType::Void, {{
             { 0x80000000 | 8, 9 },
         }}),
+        // Slot 'onNetworkDisconnected'
+        QtMocHelpers::SlotData<void()>(15, 2, QMC::AccessPrivate, QMetaType::Void),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -106,10 +112,12 @@ void NetworkManager::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
         case 1: _t->clientConnected(); break;
         case 2: _t->connectedToServer(); break;
         case 3: _t->initPositionReceived((*reinterpret_cast< std::add_pointer_t<std::vector<int>>>(_a[1]))); break;
-        case 4: _t->onMoveReceived((*reinterpret_cast< std::add_pointer_t<Move>>(_a[1]))); break;
-        case 5: _t->onClientConnected(); break;
-        case 6: _t->onConnectedToServer(); break;
-        case 7: _t->onInitPositionReceived((*reinterpret_cast< std::add_pointer_t<std::vector<int>>>(_a[1]))); break;
+        case 4: _t->networkDisconnected(); break;
+        case 5: _t->onMoveReceived((*reinterpret_cast< std::add_pointer_t<Move>>(_a[1]))); break;
+        case 6: _t->onClientConnected(); break;
+        case 7: _t->onConnectedToServer(); break;
+        case 8: _t->onInitPositionReceived((*reinterpret_cast< std::add_pointer_t<std::vector<int>>>(_a[1]))); break;
+        case 9: _t->onNetworkDisconnected(); break;
         default: ;
         }
     }
@@ -121,6 +129,8 @@ void NetworkManager::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
         if (QtMocHelpers::indexOfMethod<void (NetworkManager::*)()>(_a, &NetworkManager::connectedToServer, 2))
             return;
         if (QtMocHelpers::indexOfMethod<void (NetworkManager::*)(const std::vector<int> & )>(_a, &NetworkManager::initPositionReceived, 3))
+            return;
+        if (QtMocHelpers::indexOfMethod<void (NetworkManager::*)()>(_a, &NetworkManager::networkDisconnected, 4))
             return;
     }
 }
@@ -144,14 +154,14 @@ int NetworkManager::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 8)
+        if (_id < 10)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 8;
+        _id -= 10;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 8)
+        if (_id < 10)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 8;
+        _id -= 10;
     }
     return _id;
 }
@@ -178,5 +188,11 @@ void NetworkManager::connectedToServer()
 void NetworkManager::initPositionReceived(const std::vector<int> & _t1)
 {
     QMetaObject::activate<void>(this, &staticMetaObject, 3, nullptr, _t1);
+}
+
+// SIGNAL 4
+void NetworkManager::networkDisconnected()
+{
+    QMetaObject::activate(this, &staticMetaObject, 4, nullptr);
 }
 QT_WARNING_POP

@@ -24,6 +24,13 @@ void NetworkClient::connectToServer(const QString& ip, quint16 port) {
     m_socket->connectToHost(ip, port);
 }
 
+void NetworkClient::disconnectFromServer() {
+    if (m_socket->state() == QAbstractSocket::ConnectedState) {
+        qDebug() << "Disconnecting from server";
+        m_socket->disconnectFromHost();
+    }
+}
+
 void NetworkClient::onConnected() {
     qDebug() << "Connected to server";
     emit connected();
@@ -31,6 +38,7 @@ void NetworkClient::onConnected() {
 
 void NetworkClient::onDisconnected() {
     qDebug() << "Disconnected from server";
+    emit disconnected(); // НОВЫЙ СИГНАЛ
 }
 
 void NetworkClient::onError(QAbstractSocket::SocketError error) {
@@ -58,12 +66,10 @@ void NetworkClient::readMessage() {
         return;
     }
 
-    // Читаем маркер сообщения
     QString messageType;
     in >> messageType;
 
     if (messageType == "INIT") {
-        // Читаем начальную позицию
         qint32 size;
         in >> size;
         
@@ -80,7 +86,6 @@ void NetworkClient::readMessage() {
     }
 
     if (messageType == "MOVE") {
-        // Читаем ход
         int fromRow, fromCol, toRow, toCol;
         int pieceType, capturedType;
         bool isCastling, isPromotion;
@@ -110,7 +115,7 @@ void NetworkClient::sendMove(const Move& move) {
     out.setVersion(QDataStream::Qt_5_12);
 
     out << quint16(0);
-    out << QString("MOVE"); // ДОБАВЛЕН МАРКЕР
+    out << QString("MOVE");
     out << move.from.row << move.from.col << move.to.row << move.to.col;
     out << static_cast<int>(move.piece) << static_cast<int>(move.captured);
     out << move.isCastling << move.isPromotion;

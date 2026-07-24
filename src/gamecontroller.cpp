@@ -14,10 +14,12 @@ GameController::GameController()
             this, &GameController::connectionEstablished);
     connect(networkManager, &NetworkManager::connectedToServer,
             this, &GameController::connectionEstablished);
-    
-    // Подключаем новый сигнал для получения начальной позиции от сервера
     connect(networkManager, &NetworkManager::initPositionReceived,
             this, &GameController::onNetworkInitReceived);
+    
+    // НОВОЕ: Подключаем сигнал разрыва соединения
+    connect(networkManager, &NetworkManager::networkDisconnected,
+            this, &GameController::onNetworkDisconnected);
 }
 
 GameController::~GameController() {
@@ -34,18 +36,13 @@ void GameController::startNewGame(GameMode gameMode, Color playerColor) {
     history.clear();
 
     if (mode == GameMode::Network) {
-        // В сетевой игре доска инициализируется ТОЛЬКО сервером.
-        // Клиент ждет получения позиции от сервера, чтобы избежать рассинхрона.
         board.clearBoard();
     } else {
-        // Для локальных режимов генерируем позицию сразу
         board.generateInitialPosition();
     }
 
     if (mode == GameMode::PvAI) {
         aiPlayer = new AIPlayer(playerColor == Color::White ? Color::Black : Color::White);
-        
-        // ИСПРАВЛЕНИЕ БАГА: Если ИИ играет белыми, он должен сделать первый ход автоматически
         if (aiPlayer->color == Color::White) {
             QTimer::singleShot(500, this, &GameController::makeAiMove);
         }
@@ -65,7 +62,6 @@ void GameController::makeAiMove() {
 
     Move aiMove = aiPlayer->makeMove(board);
     
-    // ПРОВЕРКА: валиден ли ход
     if (aiMove.from.row >= 0 && aiMove.from.row < 8 && aiMove.from.col >= 0 && aiMove.from.col < 8 &&
         aiMove.to.row >= 0 && aiMove.to.row < 8 && aiMove.to.col >= 0 && aiMove.to.col < 8) {
         
@@ -76,7 +72,6 @@ void GameController::makeAiMove() {
     }
 
     qDebug() << "AI generated an invalid move, trying to find any valid move...";
-    // Fallback: найти любой валидный ход
     for (int r = 0; r < 8 && currentPlayer == aiPlayer->color; ++r) {
         for (int c = 0; c < 8 && currentPlayer == aiPlayer->color; ++c) {
             Piece* p = board.getPiece(Position(r, c));
@@ -180,7 +175,6 @@ bool GameController::handleMove(Position from, Position to) {
     currentPlayer = (currentPlayer == Color::White) ? Color::Black : Color::White;
     emit boardUpdated();
 
-    // Если режим PvAI и сейчас ход ИИ, делаем его автоматически с небольшой задержкой для обновления UI
     if (mode == GameMode::PvAI && aiPlayer && currentPlayer == aiPlayer->color) {
         QTimer::singleShot(500, this, &GameController::makeAiMove);
     }
@@ -221,7 +215,6 @@ void GameController::handleNetworkMove(const Move& move) {
 
     if (move.isPromotion) {
         delete board.getPiece(move.to);
-        // Цвет фигуры должен быть противоположен текущему игроку, так как ход уже был сделан противником
         Color opponentColor = (currentPlayer == Color::White) ? Color::Black : Color::White;
         board.cells[move.to.row][move.to.col] = new Queen(opponentColor, move.to);
         board.cells[move.to.row][move.to.col]->hasMoved = true;
@@ -247,9 +240,17 @@ void GameController::onNetworkInitReceived(const std::vector<int>& backRank) {
     handleNetworkInit(backRank);
 }
 
+// НОВАЯ РЕАЛИЗАЦИЯ: Обработка разрыва соединения
+void GameController::onNetworkDisconnected() {
+    qDebug() << "GameController: Network disconnected";
+    // Принудительно останавливаем сеть, чтобы освободить порты и сокеты
+    networkManager->stopNetwork(); 
+    // Уведомляем интерфейс, что игра прервана
+    emit networkGameEnded("Противник отключился от игры. Сетевая игра завершена.");
+}
+
 void GameController::startServer(quint16 port) {
     mode = GameMode::Network;
-    // Генерируем позицию на сервере и сохраняем её для отправки клиенту при подключении
     std::vector<int> backRank = board.generateInitialPosition();
     networkManager->setPendingInitPosition(backRank);
     networkManager->createServer(port);

@@ -58,6 +58,7 @@ private slots:
     void onConnectionEstablished();
     void onConnectionError(const QString& error);
     void onBoardUpdated();
+    void onNetworkGameEnded(const QString& reason); // НОВЫЙ СЛОТ
 
 private:
     GameController controller;
